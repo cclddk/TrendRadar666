@@ -1,74 +1,137 @@
 AI
 大模型
 ChatGPT
-+技术
-
-AI
-绘图
-视频
-+应用
+AI绘图
+AI视频
+文生图
 !广告
 !培训
+!金融
+
+金融
+股票
+基金
+A股
+美股
 
 物联网
 NAS
 Dockers
-技术
-+固件
-二手
-维修
-存储
-
 ESP32
-单片机
-+开发
+单片机开发
+固件更新
+!二手
+!维修
+!存储
 
-电池
-新能源
+电池技术
+新能源车
 电动车
 汽车
 比亚迪
++进展
++发布
 +原理
-保养
+!保养
 !试驾
-价格
 
 医疗技术
 牙齿
 牙科
 3D建模
+3D打印
 +创新
-+打印
++应用
 
 洪堡基金
 学术论文
 科研
++项目
++研究
 +申请
-+进展
 !灌水
 !抄袭
 
-职称
 工业技术
 基础原理
+职称
++评定
 +制造
-+前沿
 
-德国
+德国租房
+德国找工作
+德国生活
 科隆大学
-+租房
-
-德国
-科隆大学
-+工作
-+职位
+Sanjay Mathur教授
+!旅游
 !留学中介
 !移民
 
-德国
-生活
-+经验
-!旅游
+AI
+Large Language Model
+ChatGPT
+AI Drawing
+AI Video
+Text-to-Image
+!Ad
+!Training
+!Finance
 
-Sanjay Mathur
-+教授
+Finance
+Stock
+Fund
+A-share
+US Stock
+
+IoT
+NAS
+Docker
+ESP32
+MCU Development
+Firmware Update
+!Used
+!Repair
+!Storage
+
+Battery Technology
+New Energy Vehicle
+Electric Vehicle
+Automobile
+BYD
++Progress
++Release
++Principle
+!Maintenance
+!Test Drive
+
+Medical Technology
+Dental
+Dentistry
+3D Modeling
+3D Printing
++Innovation
++Application
+
+Humboldt Foundation
+Academic Paper
+Scientific Research
++Project
++Research
++Application
+!Shallow
+!Plagiarism
+
+Industrial Technology
+Basic Principle
+Professional Title
++Evaluation
++Manufacturing
+
+Germany Rent
+Germany Job Search
+Germany Life
+University of Cologne
+Professor Sanjay Mathur
+!Tourism
+!Study Abroad Agent
+!Immigration
