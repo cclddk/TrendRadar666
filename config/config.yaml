@@ -136,7 +136,6 @@ platforms:
   - id: "hackernews"
     name: "Hacker News"
   - id: "solidot"
-    name: "Solidot"
   - id: "v2ex"
     name: "V2EX"
   - id: "nowcoder"
@@ -148,34 +147,26 @@ platforms:
   - id: "producthunt"
     name: "ProductHunt"
 
+  # === 国际/欧美平台类 ===
+  - id: "reuters"
+    name: "Reuters 路透社"
+  - id: "bbc"
+    name: "BBC News 英国广播公司"
+  - id: "nyt"
+    name: "The New York Times 纽约时报"
+  - id: "ft"
+    name: "Financial Times 金融时报"
+  - id: "bloomberg"
+    name: "Bloomberg 彭博社"
+  - id: "spiegel"
+    name: "Der Spiegel 德国明镜"
+  - id: "dw"
+    name: "Deutsche Welle 德国之声"
+  - id: "nature"
+    name: "Nature (科研)"
+  - id: "science"
+    name: "Science (科研)"
+    
   # === 其他/工具类 ===
   - id: "chongbuluo"
     name: "虫部落"
-
-  # ======================================================
-  # 暂时失败的渠道（可能需要修复或接口已变更）
-  # 备注：以下渠道在测试中抓取失败，已暂时注释
-  # 如需使用请检查API接口状态或联系维护团队
-  # ======================================================
-  
-  # 失败的综合新闻媒体类
-  # - id: "sina"
-  #   name: "新浪"           # 失败原因：接口可能已变更
-  # - id: "sohu" 
-  #   name: "搜狐"           # 失败原因：接口可能已变更
-  
-  # 失败的财经类
-  # - id: "ghxi"
-  #   name: "国海证券"       # 失败原因：接口可能已变更
-  
-  # 失败的社交/短视频类
-  # - id: "kuaishou"
-  #   name: "快手"           # 失败原因：接口可能已变更
-  # - id: "smzdm"
-  #   name: "什么值得买"     # 失败原因：接口可能已变更
-  
-  # 失败的科技类
-  # - id: "36kr"
-  #   name: "36氪"           # 失败原因：接口可能已变更
-  # - id: "linuxdo"
-  #   name: "LinuxDo"        # 失败原因：接口可能已变更
