@@ -69,6 +69,12 @@ jobs:
           GITHUB_ACTIONS: true
         run: python main.py
 
+      - name: Prepare GitHub Pages site
+        run: |
+          mkdir -p docs
+          cp index.html docs/index.html
+          touch docs/.nojekyll
+
       - name: Commit and push if changes
         run: |
           git config --global user.name 'GitHub Actions'
