@@ -1,0 +1,761 @@
+
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>TrendRadar 热点追踪</title>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+        <style>
+            body { font-family: -apple-system, sans-serif; margin: 0; padding: 16px; background: #fafafa; color: #333; }
+            .container { max-width: 600px; margin: 0 auto; background: white; border-radius: 12px; box-shadow: 0 2px 16px rgba(0,0,0,0.06); overflow: hidden; }
+            .header { background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%); color: white; padding: 20px; text-align: center; }
+            .content { padding: 20px; }
+            .word-group { margin-bottom: 30px; }
+            .word-header { display: flex; justify-content: space-between; border-bottom: 1px solid #eee; padding-bottom: 8px; margin-bottom: 12px; }
+            .word-name { font-weight: 600; font-size: 18px; }
+            .news-item { display: flex; gap: 10px; margin-bottom: 12px; font-size: 14px; align-items: center; }
+            .news-num { min-width: 20px; color: #999; text-align: center; }
+            .news-link { color: #2563eb; text-decoration: none; }
+            .new-section { margin-bottom: 30px; padding: 15px; background: #fffbeb; border-radius: 8px; border: 1px solid #fcd34d; }
+            .new-title { color: #92400e; font-weight: bold; margin-bottom: 10px; }
+            .search-box { margin-bottom: 20px; position: relative; }
+            #search-input { width: 100%; padding: 10px; border: 2px solid #eee; border-radius: 8px; box-sizing: border-box; font-size: 14px; }
+            #search-results { display: none; position: absolute; top: 100%; left: 0; right: 0; background: white; border: 1px solid #eee; border-radius: 8px; max-height: 300px; overflow-y: auto; z-index: 100; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+            .search-item { padding: 10px; border-bottom: 1px solid #f5f5f5; font-size: 13px; }
+            .search-item a { color: #333; text-decoration: none; display: block; }
+            .search-source { font-size: 12px; color: #999; margin-top: 2px; }
+            
+            /* 随机推荐分隔样式 */
+            .random-divider { margin: 40px 0 20px 0; border-top: 2px dashed #eee; text-align: center; position: relative; }
+            .random-divider span { background: #fff; padding: 0 15px; color: #999; position: relative; top: -10px; font-size: 12px; }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="header">
+                <h2>TrendRadar 热点分析</h2>
+                <div style="font-size:12px; opacity:0.8;">2026-06-09 09:28 · 639 条资讯</div>
+            </div>
+            <div class="content">
+                <div class="search-box">
+                    <input type="text" id="search-input" placeholder="🔍 搜索全网热点...">
+                    <div id="search-results"></div>
+                </div>
+
+    
+            <div class="word-group">
+                <div class="word-header">
+                    <div class="word-name">AI 大模型 ChatGPT AI绘图 AI视频 文生图</div>
+                    <div style="font-size:12px; color:#666;">38 条</div>
+                </div>
+        
+                <div class="news-item">
+                    <div class="news-num">1</div>
+                    <div style="flex:1;">
+                        <span style="color:#999; font-size:12px;">[36氪 (商业/科技)]</span>
+                        <a href='https://www.36kr.com/newsflashes/3845237188774401' target='_blank' class='news-link'>得物与微信就AI Agent达成首批合作</a>
+                    </div>
+                </div>
+            
+                <div class="news-item">
+                    <div class="news-num">2</div>
+                    <div style="flex:1;">
+                        <span style="color:#999; font-size:12px;">[Hacker News (国际极客)]</span>
+                        <a href='https://news.ycombinator.com/item?id=48452317' target='_blank' class='news-link'>OpenAI Submits S-1 Draft to SEC</a>
+                    </div>
+                </div>
+            
+                <div class="news-item">
+                    <div class="news-num">3</div>
+                    <div style="flex:1;">
+                        <span style="color:#999; font-size:12px;">[财联社]</span>
+                        <a href='https://www.cls.cn/detail/2393919' target='_blank' class='news-link'>国家层面首次系统性部署 高质量数据集成物理AI时代“新石油”</a>
+                    </div>
+                </div>
+            
+                <div class="news-item">
+                    <div class="news-num">4</div>
+                    <div style="flex:1;">
+                        <span style="color:#999; font-size:12px;">[GitHub Trending]</span>
+                        <a href='https://github.com/RyanCodrai/turbovec' target='_blank' class='news-link'>RyanCodrai / turbovec</a>
+                    </div>
+                </div>
+            
+                <div class="news-item">
+                    <div class="news-num">5</div>
+                    <div style="flex:1;">
+                        <span style="color:#999; font-size:12px;">[华尔街见闻]</span>
+                        <a href='https://wallstreetcn.com/articles/3774087' target='_blank' class='news-link'>“你应该感到高兴！”黄仁勋力挺AI：暴跌后终于能打折买了</a>
+                    </div>
+                </div>
+            
+                <div class="news-item">
+                    <div class="news-num">6</div>
+                    <div style="flex:1;">
+                        <span style="color:#999; font-size:12px;">[掘金]</span>
+                        <a href='https://juejin.cn/post/7648157267778486287' target='_blank' class='news-link'>保姆级教程：如何0成本调用千问3.6大模型？讯飞星辰MaaS平台上手指南</a>
+                    </div>
+                </div>
+            
+                <div class="news-item">
+                    <div class="news-num">7</div>
+                    <div style="flex:1;">
+                        <span style="color:#999; font-size:12px;">[V2EX]</span>
+                        <a href='https://www.v2ex.com/t/1218920' target='_blank' class='news-link'>顺丰的 AI 笑话</a>
+                    </div>
+                </div>
+            
+                <div class="news-item">
+                    <div class="news-num">8</div>
+                    <div style="flex:1;">
+                        <span style="color:#999; font-size:12px;">[华尔街见闻]</span>
+                        <a href='https://wallstreetcn.com/articles/3774148' target='_blank' class='news-link'>苹果WWDC 2026：Siri AI姗姗来迟，Apple Intelligence全面升级，OS集体迈入27版，股价盘中转跌</a>
+                    </div>
+                </div>
+            
+                <div class="news-item">
+                    <div class="news-num">9</div>
+                    <div style="flex:1;">
+                        <span style="color:#999; font-size:12px;">[Hacker News (国际极客)]</span>
+                        <a href='https://news.ycombinator.com/item?id=48449084' target='_blank' class='news-link'>Siri AI</a>
+                    </div>
+                </div>
+            
+                <div class="news-item">
+                    <div class="news-num">10</div>
+                    <div style="flex:1;">
+                        <span style="color:#999; font-size:12px;">[酷安 (数码)]</span>
+                        <a href='https://www.coolapk.com/feed/72237354' target='_blank' class='news-link'>看了差不多一个小时的官方发布会，个人总结来看就是如果真的和官方一样画饼的话，那苹果的ai是真的追上国产的平均水平了，甚至在某些方面还有超越。</a>
+                    </div>
+                </div>
+            
+                <div class="news-item">
+                    <div class="news-num">11</div>
+                    <div style="flex:1;">
+                        <span style="color:#999; font-size:12px;">[少数派]</span>
+                        <a href='https://sspai.com/post/109850' target='_blank' class='news-link'>从插件到 AI 辅助：Obsidian 如何成为我的主力工具</a>
+                    </div>
+                </div>
+            
+                <div class="news-item">
+                    <div class="news-num">12</div>
+                    <div style="flex:1;">
+                        <span style="color:#999; font-size:12px;">[V2EX]</span>
+                        <a href='https://www.v2ex.com/t/1218909' target='_blank' class='news-link'>搞了个能自己写代码进化的 AI 数字员工，聊一下怎么做的</a>
+                    </div>
+                </div>
+            
+                <div class="news-item">
+                    <div class="news-num">13</div>
+                    <div style="flex:1;">
+                        <span style="color:#999; font-size:12px;">[知乎]</span>
+                        <a href='https://www.zhihu.com/question/2047324900080051711' target='_blank' class='news-link'>网友调侃 Gemini 为北美大豆包，称其为最蠢 AI，为什么会被诟病难用？你的使用感受如何？</a>
+                    </div>
+                </div>
+            
+                <div class="news-item">
+                    <div class="news-num">14</div>
+                    <div style="flex:1;">
+                        <span style="color:#999; font-size:12px;">[澎湃新闻]</span>
+                        <a href='https://www.thepaper.cn/newsDetail_forward_33334384] [MOBILE:https://m.thepaper.cn/newsDetail_forward_33334384' target='_blank' class='news-link'>马上评｜人们厌恶AI脸，又是在期盼什么</a>
+                    </div>
+                </div>
+            
+                <div class="news-item">
+                    <div class="news-num">15</div>
+                    <div style="flex:1;">
+                        <span style="color:#999; font-size:12px;">[财联社]</span>
+                        <a href='https://www.cls.cn/detail/2394196' target='_blank' class='news-link'>苹果智能全面升级：AI深度整合全生态 新版本Siri登场</a>
+                    </div>
+                </div>
+            
+                <div class="news-item">
+                    <div class="news-num">16</div>
+                    <div style="flex:1;">
+                        <span style="color:#999; font-size:12px;">[掘金]</span>
+                        <a href='https://juejin.cn/post/7648520470531473471' target='_blank' class='news-link'>真正的跨平台 AI 自动化框架，甚至还支持鸿蒙</a>
+                    </div>
+                </div>
+            
+                <div class="news-item">
+                    <div class="news-num">17</div>
+                    <div style="flex:1;">
+                        <span style="color:#999; font-size:12px;">[V2EX]</span>
+                        <a href='https://www.v2ex.com/t/1218818' target='_blank' class='news-link'>帮后端好哥哥 问问 glm5.1 版本 ai 设计的数据流，但是做着做着就记不住了，要过一会提醒下</a>
+                    </div>
+                </div>
+            
+                <div class="news-item">
+                    <div class="news-num">18</div>
+                    <div style="flex:1;">
+                        <span style="color:#999; font-size:12px;">[联合早报]</span>
+                        <a href='https://www.zaochenbao.com/news/opinion/202606/0973700.html' target='_blank' class='news-link'>谢伟铿：慎防反AI情绪形成风暴</a>
+                    </div>
+                </div>
+            
+                <div class="news-item">
+                    <div class="news-num">19</div>
+                    <div style="flex:1;">
+                        <span style="color:#999; font-size:12px;">[GitHub Trending]</span>
+                        <a href='https://github.com/danielmiessler/Personal_AI_Infrastructure' target='_blank' class='news-link'>danielmiessler / Personal_AI_Infrastructure</a>
+                    </div>
+                </div>
+            
+                <div class="news-item">
+                    <div class="news-num">20</div>
+                    <div style="flex:1;">
+                        <span style="color:#999; font-size:12px;">[少数派]</span>
+                        <a href='https://sspai.com/post/110106' target='_blank' class='news-link'>Await：五分钟，把点子变成 iPhone 小组件</a>
+                    </div>
+                </div>
+            
+                <div class="news-item">
+                    <div class="news-num">21</div>
+                    <div style="flex:1;">
+                        <span style="color:#999; font-size:12px;">[华尔街见闻]</span>
+                        <a href='https://wallstreetcn.com/articles/3774134' target='_blank' class='news-link'>英特尔盘前涨超14%，报道：谷歌拟下单三百万AI芯片、英伟达测试其18A工艺</a>
+                    </div>
+                </div>
+            
+                <div class="news-item">
+                    <div class="news-num">22</div>
+                    <div style="flex:1;">
+                        <span style="color:#999; font-size:12px;">[36氪 (商业/科技)]</span>
+                        <a href='https://www.36kr.com/newsflashes/3845195819124997' target='_blank' class='news-link'>中信建投：当前全球AI算力基建的订单能见度仍比较高，依旧看好AI产业链</a>
+                    </div>
+                </div>
+            
+                <div class="news-item">
+                    <div class="news-num">23</div>
+                    <div style="flex:1;">
+                        <span style="color:#999; font-size:12px;">[Hacker News (国际极客)]</span>
+                        <a href='https://news.ycombinator.com/item?id=48449665' target='_blank' class='news-link'>Apple Core AI Framework</a>
+                    </div>
+                </div>
+            
+                <div class="news-item">
+                    <div class="news-num">24</div>
+                    <div style="flex:1;">
+                        <span style="color:#999; font-size:12px;">[少数派]</span>
+                        <a href='https://sspai.com/post/110370' target='_blank' class='news-link'>AI Agent 干中学，「造轮子」让我学会了什么？</a>
+                    </div>
+                </div>
+            
+                <div class="news-item">
+                    <div class="news-num">25</div>
+                    <div style="flex:1;">
+                        <span style="color:#999; font-size:12px;">[掘金]</span>
+                        <a href='https://juejin.cn/post/7647825202339987465' target='_blank' class='news-link'>拆解与 AI 的一次对话</a>
+                    </div>
+                </div>
+            
+                <div class="news-item">
+                    <div class="news-num">26</div>
+                    <div style="flex:1;">
+                        <span style="color:#999; font-size:12px;">[GitHub Trending]</span>
+                        <a href='https://github.com/openai/plugins' target='_blank' class='news-link'>openai / plugins</a>
+                    </div>
+                </div>
+            
+                <div class="news-item">
+                    <div class="news-num">27</div>
+                    <div style="flex:1;">
+                        <span style="color:#999; font-size:12px;">[今日头条]</span>
+                        <a href='https://www.toutiao.com/trending/7649044333227675190/' target='_blank' class='news-link'>黄仁勋再访韩国带去了物理AI“生意”</a>
+                    </div>
+                </div>
+            
+                <div class="news-item">
+                    <div class="news-num">28</div>
+                    <div style="flex:1;">
+                        <span style="color:#999; font-size:12px;">[ProductHunt (新产品)]</span>
+                        <a href='https://www.producthunt.com/products/slashspace-ai?utm_campaign=producthunt-api&utm_medium=api-v2&utm_source=Application%3A+newsnow+%28ID%3A+239216%29' target='_blank' class='news-link'>Slashspace AI</a>
+                    </div>
+                </div>
+            
+                <div class="news-item">
+                    <div class="news-num">29</div>
+                    <div style="flex:1;">
+                        <span style="color:#999; font-size:12px;">[财联社]</span>
+                        <a href='https://www.cls.cn/detail/2394212' target='_blank' class='news-link'>OpenAI官宣已递交IPO申请文件 AI巨头资本大战或全面打响</a>
+                    </div>
+                </div>
+            
+                <div class="news-item">
+                    <div class="news-num">30</div>
+                    <div style="flex:1;">
+                        <span style="color:#999; font-size:12px;">[酷安 (数码)]</span>
+                        <a href='https://www.coolapk.com/feed/72237397' target='_blank' class='news-link'>欧盟不给AI是啥原因 #iOS27# #WWDC26#</a>
+                    </div>
+                </div>
+            
+                <div class="news-item">
+                    <div class="news-num">31</div>
+                    <div style="flex:1;">
+                        <span style="color:#999; font-size:12px;">[36氪 (商业/科技)]</span>
+                        <a href='https://www.36kr.com/newsflashes/3845178784434688' target='_blank' class='news-link'>马斯克谈SpaceX未来规划，展示AI数据中心卫星更多细节</a>
+                    </div>
+                </div>
+            
+                <div class="news-item">
+                    <div class="news-num">32</div>
+                    <div style="flex:1;">
+                        <span style="color:#999; font-size:12px;">[IT之家]</span>
+                        <a href='https://www.ithome.com/0/961/727.htm' target='_blank' class='news-link'>从“画饼”到实机展示，苹果 WWDC26 改变 AI 功能演示方式</a>
+                    </div>
+                </div>
+            
+                <div class="news-item">
+                    <div class="news-num">33</div>
+                    <div style="flex:1;">
+                        <span style="color:#999; font-size:12px;">[IT之家]</span>
+                        <a href='https://www.ithome.com/0/961/726.htm' target='_blank' class='news-link'>赛力斯“赛豆科技”全新品牌 AIVA 官宣：车标样式曝光，全系标配豆包大模型智能座舱</a>
+                    </div>
+                </div>
+            
+                <div class="news-item">
+                    <div class="news-num">34</div>
+                    <div style="flex:1;">
+                        <span style="color:#999; font-size:12px;">[百度热搜]</span>
+                        <a href='https://www.baidu.com/s?wd=%E5%BD%93%E6%88%91%E6%8A%8A%E4%BB%8A%E5%B9%B4%E9%AB%98%E8%80%83%E8%AF%AD%E6%96%87%E4%BD%9C%E6%96%87%E9%A2%98%E5%96%82%E7%BB%99AI' target='_blank' class='news-link'>当我把今年高考语文作文题喂给AI</a>
+                    </div>
+                </div>
+            
+                <div class="news-item">
+                    <div class="news-num">35</div>
+                    <div style="flex:1;">
+                        <span style="color:#999; font-size:12px;">[ProductHunt (新产品)]</span>
+                        <a href='https://www.producthunt.com/products/thita-ai?utm_campaign=producthunt-api&utm_medium=api-v2&utm_source=Application%3A+newsnow+%28ID%3A+239216%29' target='_blank' class='news-link'>thita.ai</a>
+                    </div>
+                </div>
+            
+                <div class="news-item">
+                    <div class="news-num">36</div>
+                    <div style="flex:1;">
+                        <span style="color:#999; font-size:12px;">[IT之家]</span>
+                        <a href='https://www.ithome.com/0/961/722.htm' target='_blank' class='news-link'>苹果 WWDC26 主题演讲一文汇总：iOS 27 等新系统发布、Siri AI 登场，库克迎来生涯“最后一舞”</a>
+                    </div>
+                </div>
+            
+                <div class="news-item">
+                    <div class="news-num">37</div>
+                    <div style="flex:1;">
+                        <span style="color:#999; font-size:12px;">[百度热搜]</span>
+                        <a href='https://www.baidu.com/s?wd=%E5%BA%93%E5%85%8B%E6%9C%80%E5%90%8E%E4%B8%80%E5%9C%BAWWDC%EF%BC%9AAI+Siri%E7%99%BB%E5%9C%BA' target='_blank' class='news-link'>库克最后一场WWDC：AI Siri登场</a>
+                    </div>
+                </div>
+            
+                <div class="news-item">
+                    <div class="news-num">38</div>
+                    <div style="flex:1;">
+                        <span style="color:#999; font-size:12px;">[百度热搜]</span>
+                        <a href='https://www.baidu.com/s?wd=%E6%97%A5%E9%9F%A9%E8%82%A1%E5%B8%82%E7%AA%81%E7%84%B6%E6%9A%B4%E8%B7%8C+AI%E6%B3%A1%E6%B2%AB%E8%A6%81%E7%A0%B4%E4%BA%86%E5%90%97' target='_blank' class='news-link'>日韩股市突然暴跌 AI泡沫要破了吗</a>
+                    </div>
+                </div>
+            </div>
+            <div class="word-group">
+                <div class="word-header">
+                    <div class="word-name">金融 股票 基金 A股 美股</div>
+                    <div style="font-size:12px; color:#666;">8 条</div>
+                </div>
+        
+                <div class="news-item">
+                    <div class="news-num">1</div>
+                    <div style="flex:1;">
+                        <span style="color:#999; font-size:12px;">[华尔街见闻]</span>
+                        <a href='https://wallstreetcn.com/articles/3774056' target='_blank' class='news-link'>芯片股力撑美股反弹，半导体指数涨超5%，英特尔大涨11%，中东局势缓和，原油冲高回落</a>
+                    </div>
+                </div>
+            
+                <div class="news-item">
+                    <div class="news-num">2</div>
+                    <div style="flex:1;">
+                        <span style="color:#999; font-size:12px;">[财联社]</span>
+                        <a href='https://www.cls.cn/detail/2394225' target='_blank' class='news-link'>【早报】美股芯片、光通信股全线反弹，半导体指数大涨5.6%；油价冲高回落，金银探底企稳</a>
+                    </div>
+                </div>
+            
+                <div class="news-item">
+                    <div class="news-num">3</div>
+                    <div style="flex:1;">
+                        <span style="color:#999; font-size:12px;">[财联社]</span>
+                        <a href='https://www.cls.cn/detail/2393791' target='_blank' class='news-link'>全球科技股急跌，黄仁勋喊话：能折价买股票 你应该感到高兴</a>
+                    </div>
+                </div>
+            
+                <div class="news-item">
+                    <div class="news-num">4</div>
+                    <div style="flex:1;">
+                        <span style="color:#999; font-size:12px;">[财联社]</span>
+                        <a href='https://www.cls.cn/detail/2393996' target='_blank' class='news-link'>中东炮火暂歇 美股期指回血 苹果WWDC接棒登场 | 今夜看点</a>
+                    </div>
+                </div>
+            
+                <div class="news-item">
+                    <div class="news-num">5</div>
+                    <div style="flex:1;">
+                        <span style="color:#999; font-size:12px;">[金十数据]</span>
+                        <a href='https://flash.jin10.com/detail/20260609085845717800' target='_blank' class='news-link'>美银警告：美股70%熊市信号已触发，是时候获利了结</a>
+                    </div>
+                </div>
+            
+                <div class="news-item">
+                    <div class="news-num">6</div>
+                    <div style="flex:1;">
+                        <span style="color:#999; font-size:12px;">[36氪 (商业/科技)]</span>
+                        <a href='https://www.36kr.com/newsflashes/3845181836232968' target='_blank' class='news-link'>日本电信巨头NTT拟设立规模5亿美元的光网络基金</a>
+                    </div>
+                </div>
+            
+                <div class="news-item">
+                    <div class="news-num">7</div>
+                    <div style="flex:1;">
+                        <span style="color:#999; font-size:12px;">[澎湃新闻]</span>
+                        <a href='https://www.thepaper.cn/newsDetail_forward_33333624] [MOBILE:https://m.thepaper.cn/newsDetail_forward_33333624' target='_blank' class='news-link'>黄仁勋谈半导体股票暴跌：每个人都应该很兴奋，现在可以以更便宜的价格买进</a>
+                    </div>
+                </div>
+            
+                <div class="news-item">
+                    <div class="news-num">8</div>
+                    <div style="flex:1;">
+                        <span style="color:#999; font-size:12px;">[微博]</span>
+                        <a href='https://s.weibo.com/weibo?q=%E7%BE%8E%E8%82%A1&t=31&band_rank=29&Refer=top] [MOBILE:https://s.weibo.com/weibo?q=%E7%BE%8E%E8%82%A1&t=31&band_rank=29&Refer=top' target='_blank' class='news-link'>美股</a>
+                    </div>
+                </div>
+            </div>
+            <div class="word-group">
+                <div class="word-header">
+                    <div class="word-name">物联网 NAS Dockers ESP32 单片机开发 固件更新</div>
+                    <div style="font-size:12px; color:#666;">1 条</div>
+                </div>
+        
+                <div class="news-item">
+                    <div class="news-num">1</div>
+                    <div style="flex:1;">
+                        <span style="color:#999; font-size:12px;">[IT之家]</span>
+                        <a href='https://www.ithome.com/0/961/743.htm' target='_blank' class='news-link'>零刻 NAS 迷你主机 ME Pro 开售 13500H 款：2+4 盘位，2569 元起</a>
+                    </div>
+                </div>
+            </div>
+            <div class="random-divider">
+                <span>以下为随机推荐内容</span>
+            </div>
+        
+                <div class="word-group">
+                    <div class="word-header">
+                        <div class="word-name" style="color:#059669;">🎲 随机推荐 (猜你喜欢)</div>
+                        <div style="font-size:12px; color:#666;">35 条</div>
+                    </div>
+            
+                    <div class="news-item">
+                        <div class="news-num">1</div>
+                        <div style="flex:1;">
+                            <span style="color:#999; font-size:12px;">[参考消息 (国际热点)]</span>
+                            <a href='https://ckxxapp.ckxx.net/pages/2026/06/08/677e379d6ddc409a9ef3b3748696d39b.html' target='_blank' class='news-link'>美媒：印度经济发展势头为何接连受挫？</a>
+                        </div>
+                    </div>
+                
+                    <div class="news-item">
+                        <div class="news-num">2</div>
+                        <div style="flex:1;">
+                            <span style="color:#999; font-size:12px;">[抖音]</span>
+                            <a href='https://www.douyin.com/hot/2527792' target='_blank' class='news-link'>从这些瞬间感受中朝友谊</a>
+                        </div>
+                    </div>
+                
+                    <div class="news-item">
+                        <div class="news-num">3</div>
+                        <div style="flex:1;">
+                            <span style="color:#999; font-size:12px;">[参考消息 (国际热点)]</span>
+                            <a href='https://ckxxapp.ckxx.net/pages/2026/06/08/466fd24536ff4eadbdcf43937846b79e.html' target='_blank' class='news-link'>欧元区一季度经济环比萎缩</a>
+                        </div>
+                    </div>
+                
+                    <div class="news-item">
+                        <div class="news-num">4</div>
+                        <div style="flex:1;">
+                            <span style="color:#999; font-size:12px;">[雪球]</span>
+                            <a href='https://xueqiu.com/s/SZ300308' target='_blank' class='news-link'>中际旭创</a>
+                        </div>
+                    </div>
+                
+                    <div class="news-item">
+                        <div class="news-num">5</div>
+                        <div style="flex:1;">
+                            <span style="color:#999; font-size:12px;">[参考消息 (国际热点)]</span>
+                            <a href='https://ckxxapp.ckxx.net/pages/2026/06/08/c2cbcd6993304e28b2a5f8c1c167acaa.html' target='_blank' class='news-link'>11岁女童遇害案让法国举国震怒</a>
+                        </div>
+                    </div>
+                
+                    <div class="news-item">
+                        <div class="news-num">6</div>
+                        <div style="flex:1;">
+                            <span style="color:#999; font-size:12px;">[雪球]</span>
+                            <a href='https://xueqiu.com/s/SH603259' target='_blank' class='news-link'>药明康德</a>
+                        </div>
+                    </div>
+                
+                    <div class="news-item">
+                        <div class="news-num">7</div>
+                        <div style="flex:1;">
+                            <span style="color:#999; font-size:12px;">[卫星通讯社]</span>
+                            <a href='https://sputniknews.cn/20260609/1071759381.html' target='_blank' class='news-link'>以军称拦截也门可疑空中目标</a>
+                        </div>
+                    </div>
+                
+                    <div class="news-item">
+                        <div class="news-num">8</div>
+                        <div style="flex:1;">
+                            <span style="color:#999; font-size:12px;">[贴吧]</span>
+                            <a href='https://tieba.baidu.com/hottopic/browse/hottopic?topic_id=28354964&amp;topic_name=%E5%B9%B4%E5%B9%B4%E7%A0%B4%E9%98%B2%2C22%E5%B1%8A%E8%80%83%E7%94%9F%E6%B2%A1%E5%AE%8C%E4%BA%86' target='_blank' class='news-link'>年年破防,22届考生没完了</a>
+                        </div>
+                    </div>
+                
+                    <div class="news-item">
+                        <div class="news-num">9</div>
+                        <div style="flex:1;">
+                            <span style="color:#999; font-size:12px;">[虫部落]</span>
+                            <a href='https://www.chongbuluo.com/thread-24604-1-1.html' target='_blank' class='news-link'>36了还没结婚，很焦急</a>
+                        </div>
+                    </div>
+                
+                    <div class="news-item">
+                        <div class="news-num">10</div>
+                        <div style="flex:1;">
+                            <span style="color:#999; font-size:12px;">[虎扑]</span>
+                            <a href='https://bbs.hupu.com/639790124.html] [MOBILE:https://bbs.hupu.com/639790124.html' target='_blank' class='news-link'>市政府秘书长，去下面县里担任县委书记，这是平调重用吗？</a>
+                        </div>
+                    </div>
+                
+                    <div class="news-item">
+                        <div class="news-num">11</div>
+                        <div style="flex:1;">
+                            <span style="color:#999; font-size:12px;">[抖音]</span>
+                            <a href='https://www.douyin.com/hot/2527231' target='_blank' class='news-link'>哇咔哇咔杀回来了</a>
+                        </div>
+                    </div>
+                
+                    <div class="news-item">
+                        <div class="news-num">12</div>
+                        <div style="flex:1;">
+                            <span style="color:#999; font-size:12px;">[B站热搜]</span>
+                            <a href='https://search.bilibili.com/all?keyword=%E5%A6%82%E4%BD%95%E8%AF%84%E4%BB%B72026%E9%AB%98%E8%80%83%E5%8E%86%E5%8F%B2' target='_blank' class='news-link'>如何评价2026高考历史</a>
+                        </div>
+                    </div>
+                
+                    <div class="news-item">
+                        <div class="news-num">13</div>
+                        <div style="flex:1;">
+                            <span style="color:#999; font-size:12px;">[雪球]</span>
+                            <a href='https://xueqiu.com/s/TSLA' target='_blank' class='news-link'>特斯拉</a>
+                        </div>
+                    </div>
+                
+                    <div class="news-item">
+                        <div class="news-num">14</div>
+                        <div style="flex:1;">
+                            <span style="color:#999; font-size:12px;">[虫部落]</span>
+                            <a href='https://www.chongbuluo.com/thread-24410-1-1.html' target='_blank' class='news-link'>经常用闲鱼买二手物品，感觉很省钱，但是一种被看不起感觉，如何矫正这种思想。</a>
+                        </div>
+                    </div>
+                
+                    <div class="news-item">
+                        <div class="news-num">15</div>
+                        <div style="flex:1;">
+                            <span style="color:#999; font-size:12px;">[虫部落]</span>
+                            <a href='https://www.chongbuluo.com/thread-24542-1-1.html' target='_blank' class='news-link'>你对什么气味有着特殊的癖好？</a>
+                        </div>
+                    </div>
+                
+                    <div class="news-item">
+                        <div class="news-num">16</div>
+                        <div style="flex:1;">
+                            <span style="color:#999; font-size:12px;">[贴吧]</span>
+                            <a href='https://tieba.baidu.com/hottopic/browse/hottopic?topic_id=28354961&amp;topic_name=%E6%BB%A4%E9%95%9C%E5%A4%B1%E6%95%88%2C%E5%A5%B3%E4%B8%BB%E6%92%AD%E9%9D%A0%E7%9C%9F%E5%AE%B9%E5%9C%88%E7%B2%89' target='_blank' class='news-link'>滤镜失效,女主播靠真容圈粉</a>
+                        </div>
+                    </div>
+                
+                    <div class="news-item">
+                        <div class="news-num">17</div>
+                        <div style="flex:1;">
+                            <span style="color:#999; font-size:12px;">[参考消息 (国际热点)]</span>
+                            <a href='https://ckxxapp.ckxx.net/pages/2026/06/08/a0c952cbdf04475aa14ca30f296036bf.html' target='_blank' class='news-link'>特朗普：“我从未承诺不发动战争”</a>
+                        </div>
+                    </div>
+                
+                    <div class="news-item">
+                        <div class="news-num">18</div>
+                        <div style="flex:1;">
+                            <span style="color:#999; font-size:12px;">[抖音]</span>
+                            <a href='https://www.douyin.com/hot/2527282' target='_blank' class='news-link'>奔跑吧因安阳特辑用邯郸画面致歉</a>
+                        </div>
+                    </div>
+                
+                    <div class="news-item">
+                        <div class="news-num">19</div>
+                        <div style="flex:1;">
+                            <span style="color:#999; font-size:12px;">[贴吧]</span>
+                            <a href='https://tieba.baidu.com/hottopic/browse/hottopic?topic_id=28354960&amp;topic_name=%E8%BF%BD%E5%A6%B9%E4%B8%8D%E5%BC%80%E5%8F%A3%2C%E8%B1%86%E5%8C%85%E5%8C%96%E8%BA%AB%E4%BB%A3%E8%81%8A%E4%BE%A0' target='_blank' class='news-link'>追妹不开口,豆包化身代聊侠</a>
+                        </div>
+                    </div>
+                
+                    <div class="news-item">
+                        <div class="news-num">20</div>
+                        <div style="flex:1;">
+                            <span style="color:#999; font-size:12px;">[B站热搜]</span>
+                            <a href='https://search.bilibili.com/all?keyword=%E8%83%A1%E5%A1%9E%E6%AD%A6%E8%A3%85%E7%A7%B0%E5%90%91%E4%BB%A5%E8%89%B2%E5%88%97%E5%8F%91%E5%B0%84%E5%AF%BC%E5%BC%B9' target='_blank' class='news-link'>胡塞武装称向以色列发射导弹</a>
+                        </div>
+                    </div>
+                
+                    <div class="news-item">
+                        <div class="news-num">21</div>
+                        <div style="flex:1;">
+                            <span style="color:#999; font-size:12px;">[虫部落]</span>
+                            <a href='https://www.chongbuluo.com/thread-24392-1-1.html' target='_blank' class='news-link'>我好像心动了</a>
+                        </div>
+                    </div>
+                
+                    <div class="news-item">
+                        <div class="news-num">22</div>
+                        <div style="flex:1;">
+                            <span style="color:#999; font-size:12px;">[虫部落]</span>
+                            <a href='https://www.chongbuluo.com/thread-24239-1-1.html' target='_blank' class='news-link'>股市投资者自测指南——15问测测你是韭菜还是收割者</a>
+                        </div>
+                    </div>
+                
+                    <div class="news-item">
+                        <div class="news-num">23</div>
+                        <div style="flex:1;">
+                            <span style="color:#999; font-size:12px;">[雪球]</span>
+                            <a href='https://xueqiu.com/s/SZ300831' target='_blank' class='news-link'>ST派瑞</a>
+                        </div>
+                    </div>
+                
+                    <div class="news-item">
+                        <div class="news-num">24</div>
+                        <div style="flex:1;">
+                            <span style="color:#999; font-size:12px;">[抖音]</span>
+                            <a href='https://www.douyin.com/hot/2527654' target='_blank' class='news-link'>谢苗谈功夫演员断层</a>
+                        </div>
+                    </div>
+                
+                    <div class="news-item">
+                        <div class="news-num">25</div>
+                        <div style="flex:1;">
+                            <span style="color:#999; font-size:12px;">[虎扑]</span>
+                            <a href='https://bbs.hupu.com/639772733.html] [MOBILE:https://bbs.hupu.com/639772733.html' target='_blank' class='news-link'>59岁梁实第三十次高考</a>
+                        </div>
+                    </div>
+                
+                    <div class="news-item">
+                        <div class="news-num">26</div>
+                        <div style="flex:1;">
+                            <span style="color:#999; font-size:12px;">[抖音]</span>
+                            <a href='https://www.douyin.com/hot/2527254' target='_blank' class='news-link'>青春是本写不完的旧书</a>
+                        </div>
+                    </div>
+                
+                    <div class="news-item">
+                        <div class="news-num">27</div>
+                        <div style="flex:1;">
+                            <span style="color:#999; font-size:12px;">[虎扑]</span>
+                            <a href='https://bbs.hupu.com/639773521.html] [MOBILE:https://bbs.hupu.com/639773521.html' target='_blank' class='news-link'>真实经历 | 38W+磕头。。。大结局</a>
+                        </div>
+                    </div>
+                
+                    <div class="news-item">
+                        <div class="news-num">28</div>
+                        <div style="flex:1;">
+                            <span style="color:#999; font-size:12px;">[贴吧]</span>
+                            <a href='https://tieba.baidu.com/hottopic/browse/hottopic?topic_id=28354974&amp;topic_name=%E5%BC%80%E5%9B%A2%21%E8%B5%B7%E7%82%B9%E4%BD%9C%E5%AE%B6%E8%81%94%E5%90%8D%E5%8F%8D%E6%8A%84%E8%A2%AD' target='_blank' class='news-link'>开团!起点作家联名反抄袭</a>
+                        </div>
+                    </div>
+                
+                    <div class="news-item">
+                        <div class="news-num">29</div>
+                        <div style="flex:1;">
+                            <span style="color:#999; font-size:12px;">[贴吧]</span>
+                            <a href='https://tieba.baidu.com/hottopic/browse/hottopic?topic_id=28354981&amp;topic_name=%E5%A4%A7%E4%BD%9C%E5%A4%AA%E5%A4%9A%21%E6%96%B0%E6%B8%B8%E6%8C%A4%E7%88%86%E5%A4%8F%E6%97%A5%E6%B8%B8%E6%88%8F%E8%8A%82' target='_blank' class='news-link'>大作太多!新游挤爆夏日游戏节</a>
+                        </div>
+                    </div>
+                
+                    <div class="news-item">
+                        <div class="news-num">30</div>
+                        <div style="flex:1;">
+                            <span style="color:#999; font-size:12px;">[B站热搜]</span>
+                            <a href='https://search.bilibili.com/all?keyword=%E8%B7%91%E7%94%B7%E6%9D%8E%E6%99%A8%E7%8A%B6%E6%80%81%E5%BC%95%E8%AE%A8%E8%AE%BA' target='_blank' class='news-link'>跑男李晨状态引讨论</a>
+                        </div>
+                    </div>
+                
+                    <div class="news-item">
+                        <div class="news-num">31</div>
+                        <div style="flex:1;">
+                            <span style="color:#999; font-size:12px;">[B站热搜]</span>
+                            <a href='https://search.bilibili.com/all?keyword=%E7%BD%91%E9%A3%9E%E6%96%B0%E5%89%A7%E9%93%81%E6%8B%B3%E6%95%99%E8%82%B2%E8%AE%B2%E4%BA%86%E4%BB%80%E4%B9%88' target='_blank' class='news-link'>网飞新剧铁拳教育讲了什么</a>
+                        </div>
+                    </div>
+                
+                    <div class="news-item">
+                        <div class="news-num">32</div>
+                        <div style="flex:1;">
+                            <span style="color:#999; font-size:12px;">[B站热搜]</span>
+                            <a href='https://search.bilibili.com/all?keyword=LEV%E6%88%98%E8%83%9CNRG' target='_blank' class='news-link'>LEV战胜NRG</a>
+                        </div>
+                    </div>
+                
+                    <div class="news-item">
+                        <div class="news-num">33</div>
+                        <div style="flex:1;">
+                            <span style="color:#999; font-size:12px;">[雪球]</span>
+                            <a href='https://xueqiu.com/s/SH688008' target='_blank' class='news-link'>澜起科技</a>
+                        </div>
+                    </div>
+                
+                    <div class="news-item">
+                        <div class="news-num">34</div>
+                        <div style="flex:1;">
+                            <span style="color:#999; font-size:12px;">[贴吧]</span>
+                            <a href='https://tieba.baidu.com/hottopic/browse/hottopic?topic_id=28354967&amp;topic_name=%E8%B0%81%E6%98%AF%E6%AD%A3%E7%BB%9F%3F%E5%90%A7%E5%8F%8B%E4%B8%BA%E5%81%87%E5%B0%8F%E5%AD%90XP%E5%90%B5%E7%BF%BB' target='_blank' class='news-link'>谁是正统?吧友为假小子XP吵翻</a>
+                        </div>
+                    </div>
+                
+                    <div class="news-item">
+                        <div class="news-num">35</div>
+                        <div style="flex:1;">
+                            <span style="color:#999; font-size:12px;">[雪球]</span>
+                            <a href='https://xueqiu.com/s/SZ300835' target='_blank' class='news-link'>龙磁科技</a>
+                        </div>
+                    </div>
+                </div><div style='color:red; font-size:12px; margin-top:20px; padding:10px; background:#fff1f2; border-radius:8px;'>⚠️ 获取失败: huanqiu, wsj, hellogithub, douban-group, ngabbs</div>
+            </div>
+            <div style="text-align:center; padding:20px; color:#999; font-size:12px; background:#f8f9fa;">
+                Powered by TrendRadar v3.0.7
+            </div>
+        </div>
+        
+        <script>
+            const allData = [{"t": "家长开吊车拉横幅：考不好爸妈养你", "u": "https://www.toutiao.com/trending/7648904557574553643/", "s": "今日头条"}, {"t": "iOS 27新增工作日调休闹钟", "u": "https://www.toutiao.com/trending/7648080827724857363/", "s": "今日头条"}, {"t": "中朝传统友谊崭新篇章如何续写", "u": "https://www.toutiao.com/trending/7648942144656313899/", "s": "今日头条"}, {"t": "新能源二手车怎么越来越“香”了", "u": "https://www.toutiao.com/trending/7648688958054465590/", "s": "今日头条"}, {"t": "总决赛G3尼克斯vs马刺", "u": "https://www.toutiao.com/trending/7648939445655260735/", "s": "今日头条"}, {"t": "男子伪装店员带走醉酒女子后性侵", "u": "https://www.toutiao.com/trending/7649028207740059691/", "s": "今日头条"}, {"t": "主要产油国宣布7月继续保持增产", "u": "https://www.toutiao.com/trending/7648826516789166126/", "s": "今日头条"}, {"t": "佛山版“谢南枝”97岁了", "u": "https://www.toutiao.com/trending/7648924171666882601/", "s": "今日头条"}, {"t": "鸡蛋为什么突然涨价", "u": "https://www.toutiao.com/trending/7648984599233564198/", "s": "今日头条"}, {"t": "黄仁勋再访韩国带去了物理AI“生意”", "u": "https://www.toutiao.com/trending/7649044333227675190/", "s": "今日头条"}, {"t": "不吃主食可救“碳水脸”？不可信", "u": "https://www.toutiao.com/trending/7648961353312337956/", "s": "今日头条"}, {"t": "美国女孩26年前奇迹般预言新郎名字", "u": "https://www.toutiao.com/trending/7649048153247203364/", "s": "今日头条"}, {"t": "郑钦文伦敦站首轮出局", "u": "https://www.toutiao.com/trending/7649167620423290410/", "s": "今日头条"}, {"t": "15万买新能源车还没开回家就出问题", "u": "https://www.toutiao.com/trending/7648583608257069099/", "s": "今日头条"}, {"t": "菲律宾为何会发生强震", "u": "https://www.toutiao.com/trending/7648823764209729563/", "s": "今日头条"}, {"t": "开车遇对向开远光 前方有人路中吃席", "u": "https://www.toutiao.com/trending/7648923497834414090/", "s": "今日头条"}, {"t": "美股存储芯片反弹 英特尔飙涨11%", "u": "https://www.toutiao.com/trending/7648917559476191274/", "s": "今日头条"}, {"t": "跑男团全员包场白鹿《莫离》", "u": "https://www.toutiao.com/trending/7648960959167578122/", "s": "今日头条"}, {"t": "金价下跌后郑州金店被挤爆", "u": "https://www.toutiao.com/trending/7648415475306889252/", "s": "今日头条"}, {"t": "刘吴月：机器人零部件大机遇来了", "u": "https://www.toutiao.com/trending/7649040592684793898/", "s": "今日头条"}, {"t": "刘浩存李思潼崛起 00花格局被改写", "u": "https://www.toutiao.com/trending/7648411827004555315/", "s": "今日头条"}, {"t": "九旬老夫妻立遗嘱把房产留给患病女儿", "u": "https://www.toutiao.com/trending/7648637574597591046/", "s": "今日头条"}, {"t": "电子布价格涨幅达100%", "u": "https://www.toutiao.com/trending/7648277353277243434/", "s": "今日头条"}, {"t": "英伟达与SK海力士共研下一代存储", "u": "https://www.toutiao.com/trending/7649004317110124563/", "s": "今日头条"}, {"t": "媒体：两岸统一后台湾将不再缺电", "u": "https://www.toutiao.com/trending/7648853210555875370/", "s": "今日头条"}, {"t": "高考数学题让宁夏青铜峡108塔出名了", "u": "https://www.toutiao.com/trending/7648626168754208804/", "s": "今日头条"}, {"t": "中信建投：工程机械5月继续超预期", "u": "https://www.toutiao.com/trending/7648768504350883850/", "s": "今日头条"}, {"t": "女警私盖公章赊购烟茶酒获刑8年", "u": "https://www.toutiao.com/trending/7648977841115824182/", "s": "今日头条"}, {"t": "三峡水运新通道能带来什么", "u": "https://www.toutiao.com/trending/7648989853821091903/", "s": "今日头条"}, {"t": "贺龙元帅逝世57周年", "u": "https://www.toutiao.com/trending/7648866770752765993/", "s": "今日头条"}, {"t": "新能源二手车越来越“香”了", "u": "https://www.baidu.com/s?wd=%E6%96%B0%E8%83%BD%E6%BA%90%E4%BA%8C%E6%89%8B%E8%BD%A6%E8%B6%8A%E6%9D%A5%E8%B6%8A%E2%80%9C%E9%A6%99%E2%80%9D%E4%BA%86", "s": "百度热搜"}, {"t": "高考数学题让宁夏青铜峡108塔出名了", "u": "https://www.baidu.com/s?wd=%E9%AB%98%E8%80%83%E6%95%B0%E5%AD%A6%E9%A2%98%E8%AE%A9%E5%AE%81%E5%A4%8F%E9%9D%92%E9%93%9C%E5%B3%A1108%E5%A1%94%E5%87%BA%E5%90%8D%E4%BA%86", "s": "百度热搜"}, {"t": "中朝传统友谊崭新篇章如何续写", "u": "https://www.baidu.com/s?wd=%E4%B8%AD%E6%9C%9D%E4%BC%A0%E7%BB%9F%E5%8F%8B%E8%B0%8A%E5%B4%AD%E6%96%B0%E7%AF%87%E7%AB%A0%E5%A6%82%E4%BD%95%E7%BB%AD%E5%86%99", "s": "百度热搜"}, {"t": "数学老师连续4年高考：做题汗流浃背", "u": "https://www.baidu.com/s?wd=%E6%95%B0%E5%AD%A6%E8%80%81%E5%B8%88%E8%BF%9E%E7%BB%AD4%E5%B9%B4%E9%AB%98%E8%80%83%EF%BC%9A%E5%81%9A%E9%A2%98%E6%B1%97%E6%B5%81%E6%B5%83%E8%83%8C", "s": "百度热搜"}, {"t": "电子布价格涨幅达100%", "u": "https://www.baidu.com/s?wd=%E7%94%B5%E5%AD%90%E5%B8%83%E4%BB%B7%E6%A0%BC%E6%B6%A8%E5%B9%85%E8%BE%BE100%25", "s": "百度热搜"}, {"t": "金价大跌 郑州金店被挤爆", "u": "https://www.baidu.com/s?wd=%E9%87%91%E4%BB%B7%E5%A4%A7%E8%B7%8C+%E9%83%91%E5%B7%9E%E9%87%91%E5%BA%97%E8%A2%AB%E6%8C%A4%E7%88%86", "s": "百度热搜"}, {"t": "沙子已成全球第二大被过度开发资源", "u": "https://www.baidu.com/s?wd=%E6%B2%99%E5%AD%90%E5%B7%B2%E6%88%90%E5%85%A8%E7%90%83%E7%AC%AC%E4%BA%8C%E5%A4%A7%E8%A2%AB%E8%BF%87%E5%BA%A6%E5%BC%80%E5%8F%91%E8%B5%84%E6%BA%90", "s": "百度热搜"}, {"t": "“李华 我再也不用见到你了”", "u": "https://www.baidu.com/s?wd=%E2%80%9C%E6%9D%8E%E5%8D%8E+%E6%88%91%E5%86%8D%E4%B9%9F%E4%B8%8D%E7%94%A8%E8%A7%81%E5%88%B0%E4%BD%A0%E4%BA%86%E2%80%9D", "s": "百度热搜"}, {"t": "司机避开远光灯后发现4人在车道吃饭", "u": "https://www.baidu.com/s?wd=%E5%8F%B8%E6%9C%BA%E9%81%BF%E5%BC%80%E8%BF%9C%E5%85%89%E7%81%AF%E5%90%8E%E5%8F%91%E7%8E%B04%E4%BA%BA%E5%9C%A8%E8%BD%A6%E9%81%93%E5%90%83%E9%A5%AD", "s": "百度热搜"}, {"t": "6分钱一支“脏牙刷”主要供给民宿", "u": "https://www.baidu.com/s?wd=6%E5%88%86%E9%92%B1%E4%B8%80%E6%94%AF%E2%80%9C%E8%84%8F%E7%89%99%E5%88%B7%E2%80%9D%E4%B8%BB%E8%A6%81%E4%BE%9B%E7%BB%99%E6%B0%91%E5%AE%BF", "s": "百度热搜"}, {"t": "亳州曹操运兵道开挖系谣言", "u": "https://www.baidu.com/s?wd=%E4%BA%B3%E5%B7%9E%E6%9B%B9%E6%93%8D%E8%BF%90%E5%85%B5%E9%81%93%E5%BC%80%E6%8C%96%E7%B3%BB%E8%B0%A3%E8%A8%80", "s": "百度热搜"}, {"t": "男子冒充店员骗走醉酒女子实施侵害", "u": "https://www.baidu.com/s?wd=%E7%94%B7%E5%AD%90%E5%86%92%E5%85%85%E5%BA%97%E5%91%98%E9%AA%97%E8%B5%B0%E9%86%89%E9%85%92%E5%A5%B3%E5%AD%90%E5%AE%9E%E6%96%BD%E4%BE%B5%E5%AE%B3", "s": "百度热搜"}, {"t": "医生：别再给孩子多吃糖", "u": "https://www.baidu.com/s?wd=%E5%8C%BB%E7%94%9F%EF%BC%9A%E5%88%AB%E5%86%8D%E7%BB%99%E5%AD%A9%E5%AD%90%E5%A4%9A%E5%90%83%E7%B3%96", "s": "百度热搜"}, {"t": "郑钦文止步伦敦WTA500女王杯首轮", "u": "https://www.baidu.com/s?wd=%E9%83%91%E9%92%A6%E6%96%87%E6%AD%A2%E6%AD%A5%E4%BC%A6%E6%95%A6WTA500%E5%A5%B3%E7%8E%8B%E6%9D%AF%E9%A6%96%E8%BD%AE", "s": "百度热搜"}, {"t": "NBA总决赛", "u": "https://www.baidu.com/s?wd=NBA%E6%80%BB%E5%86%B3%E8%B5%9B", "s": "百度热搜"}, {"t": "女警私盖公章赊购烟茶酒获刑8年", "u": "https://www.baidu.com/s?wd=%E5%A5%B3%E8%AD%A6%E7%A7%81%E7%9B%96%E5%85%AC%E7%AB%A0%E8%B5%8A%E8%B4%AD%E7%83%9F%E8%8C%B6%E9%85%92%E8%8E%B7%E5%88%918%E5%B9%B4", "s": "百度热搜"}, {"t": "文科生的春天又回来了吗", "u": "https://www.baidu.com/s?wd=%E6%96%87%E7%A7%91%E7%94%9F%E7%9A%84%E6%98%A5%E5%A4%A9%E5%8F%88%E5%9B%9E%E6%9D%A5%E4%BA%86%E5%90%97", "s": "百度热搜"}, {"t": "当我把今年高考语文作文题喂给AI", "u": "https://www.baidu.com/s?wd=%E5%BD%93%E6%88%91%E6%8A%8A%E4%BB%8A%E5%B9%B4%E9%AB%98%E8%80%83%E8%AF%AD%E6%96%87%E4%BD%9C%E6%96%87%E9%A2%98%E5%96%82%E7%BB%99AI", "s": "百度热搜"}, {"t": "双胞胎姐妹遭袭一死一伤案最新进展", "u": "https://www.baidu.com/s?wd=%E5%8F%8C%E8%83%9E%E8%83%8E%E5%A7%90%E5%A6%B9%E9%81%AD%E8%A2%AD%E4%B8%80%E6%AD%BB%E4%B8%80%E4%BC%A4%E6%A1%88%E6%9C%80%E6%96%B0%E8%BF%9B%E5%B1%95", "s": "百度热搜"}, {"t": "18年前被捡的弃婴高考后跪谢养母", "u": "https://www.baidu.com/s?wd=18%E5%B9%B4%E5%89%8D%E8%A2%AB%E6%8D%A1%E7%9A%84%E5%BC%83%E5%A9%B4%E9%AB%98%E8%80%83%E5%90%8E%E8%B7%AA%E8%B0%A2%E5%85%BB%E6%AF%8D", "s": "百度热搜"}, {"t": "长沙考生妈妈提花等女儿下考", "u": "https://www.baidu.com/s?wd=%E9%95%BF%E6%B2%99%E8%80%83%E7%94%9F%E5%A6%88%E5%A6%88%E6%8F%90%E8%8A%B1%E7%AD%89%E5%A5%B3%E5%84%BF%E4%B8%8B%E8%80%83", "s": "百度热搜"}, {"t": "考完数学沉默了 考完英语又笑了", "u": "https://www.baidu.com/s?wd=%E8%80%83%E5%AE%8C%E6%95%B0%E5%AD%A6%E6%B2%89%E9%BB%98%E4%BA%86+%E8%80%83%E5%AE%8C%E8%8B%B1%E8%AF%AD%E5%8F%88%E7%AC%91%E4%BA%86", "s": "百度热搜"}, {"t": "四川00后班主任返还三年暂扣物品", "u": "https://www.baidu.com/s?wd=%E5%9B%9B%E5%B7%9D00%E5%90%8E%E7%8F%AD%E4%B8%BB%E4%BB%BB%E8%BF%94%E8%BF%98%E4%B8%89%E5%B9%B4%E6%9A%82%E6%89%A3%E7%89%A9%E5%93%81", "s": "百度热搜"}, {"t": "“巨贪”白天辉单笔受贿高达11.03亿", "u": "https://www.baidu.com/s?wd=%E2%80%9C%E5%B7%A8%E8%B4%AA%E2%80%9D%E7%99%BD%E5%A4%A9%E8%BE%89%E5%8D%95%E7%AC%94%E5%8F%97%E8%B4%BF%E9%AB%98%E8%BE%BE11.03%E4%BA%BF", "s": "百度热搜"}, {"t": "库克最后一场WWDC：AI Siri登场", "u": "https://www.baidu.com/s?wd=%E5%BA%93%E5%85%8B%E6%9C%80%E5%90%8E%E4%B8%80%E5%9C%BAWWDC%EF%BC%9AAI+Siri%E7%99%BB%E5%9C%BA", "s": "百度热搜"}, {"t": "又一国产减肥药挑战司美格鲁肽", "u": "https://www.baidu.com/s?wd=%E5%8F%88%E4%B8%80%E5%9B%BD%E4%BA%A7%E5%87%8F%E8%82%A5%E8%8D%AF%E6%8C%91%E6%88%98%E5%8F%B8%E7%BE%8E%E6%A0%BC%E9%B2%81%E8%82%BD", "s": "百度热搜"}, {"t": "94岁胡枫演唱会开近5小时", "u": "https://www.baidu.com/s?wd=94%E5%B2%81%E8%83%A1%E6%9E%AB%E6%BC%94%E5%94%B1%E4%BC%9A%E5%BC%80%E8%BF%915%E5%B0%8F%E6%97%B6", "s": "百度热搜"}, {"t": "印度去年的案件突然“震动”美国", "u": "https://www.baidu.com/s?wd=%E5%8D%B0%E5%BA%A6%E5%8E%BB%E5%B9%B4%E7%9A%84%E6%A1%88%E4%BB%B6%E7%AA%81%E7%84%B6%E2%80%9C%E9%9C%87%E5%8A%A8%E2%80%9D%E7%BE%8E%E5%9B%BD", "s": "百度热搜"}, {"t": "日韩股市突然暴跌 AI泡沫要破了吗", "u": "https://www.baidu.com/s?wd=%E6%97%A5%E9%9F%A9%E8%82%A1%E5%B8%82%E7%AA%81%E7%84%B6%E6%9A%B4%E8%B7%8C+AI%E6%B3%A1%E6%B2%AB%E8%A6%81%E7%A0%B4%E4%BA%86%E5%90%97", "s": "百度热搜"}, {"t": "“电蹦蹦”走俏海外说明什么", "u": "https://www.baidu.com/s?wd=%E2%80%9C%E7%94%B5%E8%B9%A6%E8%B9%A6%E2%80%9D%E8%B5%B0%E4%BF%8F%E6%B5%B7%E5%A4%96%E8%AF%B4%E6%98%8E%E4%BB%80%E4%B9%88", "s": "百度热搜"}, {"t": "详讯丨习近平同金正恩举行会谈", "u": "https://www.thepaper.cn/newsDetail_forward_33334348] [MOBILE:https://m.thepaper.cn/newsDetail_forward_33334348", "s": "澎湃新闻"}, {"t": "习近平出席金正恩举行的欢迎仪式", "u": "https://www.thepaper.cn/newsDetail_forward_33332927] [MOBILE:https://m.thepaper.cn/newsDetail_forward_33332927", "s": "澎湃新闻"}, {"t": "扬州回应“央视曝光回收料牙刷”：依法从严从快作出处理", "u": "https://www.thepaper.cn/newsDetail_forward_33331870] [MOBILE:https://m.thepaper.cn/newsDetail_forward_33331870", "s": "澎湃新闻"}, {"t": "主持人插不进话，特朗普受访暴怒失控：当场“摔麦”走人", "u": "https://www.thepaper.cn/newsDetail_forward_33331551] [MOBILE:https://m.thepaper.cn/newsDetail_forward_33331551", "s": "澎湃新闻"}, {"t": "马上评｜人们厌恶AI脸，又是在期盼什么", "u": "https://www.thepaper.cn/newsDetail_forward_33334384] [MOBILE:https://m.thepaper.cn/newsDetail_forward_33334384", "s": "澎湃新闻"}, {"t": "深一度｜多国球迷申请美签遭拒，这不是属于球迷的世界杯？", "u": "https://www.thepaper.cn/newsDetail_forward_33334286] [MOBILE:https://m.thepaper.cn/newsDetail_forward_33334286", "s": "澎湃新闻"}, {"t": "一图看懂｜数据总结美以伊战事100天", "u": "https://www.thepaper.cn/newsDetail_forward_33335579] [MOBILE:https://m.thepaper.cn/newsDetail_forward_33335579", "s": "澎湃新闻"}, {"t": "江西南昌一辆小米SU7 Ultra起火，小米公司回应", "u": "https://www.thepaper.cn/newsDetail_forward_33335969] [MOBILE:https://m.thepaper.cn/newsDetail_forward_33335969", "s": "澎湃新闻"}, {"t": "“真正的瓶颈在于芯片制造能力”，马斯克唱多美光：目前产能远不及芯片实际需求", "u": "https://www.thepaper.cn/newsDetail_forward_33333635] [MOBILE:https://m.thepaper.cn/newsDetail_forward_33333635", "s": "澎湃新闻"}, {"t": "国务院国资委原副部长级干部潘良被开除党籍：作风败坏，大肆敛财", "u": "https://www.thepaper.cn/newsDetail_forward_33333692] [MOBILE:https://m.thepaper.cn/newsDetail_forward_33333692", "s": "澎湃新闻"}, {"t": "黑龙江同江市委书记送考被喊学霸，鼓励考生考得比哈工大更好", "u": "https://www.thepaper.cn/newsDetail_forward_33332009] [MOBILE:https://m.thepaper.cn/newsDetail_forward_33332009", "s": "澎湃新闻"}, {"t": "安徽滁州女刑警诈骗案调查：以招待名义向15人赊购700万烟茶酒，有个体户持“公章合同”追债", "u": "https://www.thepaper.cn/newsDetail_forward_33333017] [MOBILE:https://m.thepaper.cn/newsDetail_forward_33333017", "s": "澎湃新闻"}, {"t": "黄仁勋谈半导体股票暴跌：每个人都应该很兴奋，现在可以以更便宜的价格买进", "u": "https://www.thepaper.cn/newsDetail_forward_33333624] [MOBILE:https://m.thepaper.cn/newsDetail_forward_33333624", "s": "澎湃新闻"}, {"t": "魏晓奎任福建省委常委、省纪委书记", "u": "https://www.thepaper.cn/newsDetail_forward_33331996] [MOBILE:https://m.thepaper.cn/newsDetail_forward_33331996", "s": "澎湃新闻"}, {"t": "住建部：城市更新“十五五”规划提出10项主要指标，23项重点任务", "u": "https://www.thepaper.cn/newsDetail_forward_33331903] [MOBILE:https://m.thepaper.cn/newsDetail_forward_33331903", "s": "澎湃新闻"}, {"t": "回到2025年底！国际金价跌破4300美元，短期偏弱格局还将持续多久？", "u": "https://www.thepaper.cn/newsDetail_forward_33334905] [MOBILE:https://m.thepaper.cn/newsDetail_forward_33334905", "s": "澎湃新闻"}, {"t": "论法的精神 | 何勤华：半生治史，为法治“燃灯”", "u": "https://www.thepaper.cn/newsDetail_forward_33330287] [MOBILE:https://m.thepaper.cn/newsDetail_forward_33330287", "s": "澎湃新闻"}, {"t": "新疆维吾尔自治区党委原常委、自治区政府原副主席陈伟俊被双开", "u": "https://www.thepaper.cn/newsDetail_forward_33333678] [MOBILE:https://m.thepaper.cn/newsDetail_forward_33333678", "s": "澎湃新闻"}, {"t": "乘联分会：汽车出口成行业增长核心支柱，预计6月“弱复苏”", "u": "https://www.thepaper.cn/newsDetail_forward_33336337] [MOBILE:https://m.thepaper.cn/newsDetail_forward_33336337", "s": "澎湃新闻"}, {"t": "美媒：印度经济发展势头为何接连受挫？", "u": "https://ckxxapp.ckxx.net/pages/2026/06/08/677e379d6ddc409a9ef3b3748696d39b.html", "s": "参考消息 (国际热点)"}, {"t": "英法德计划为乌生产远程武器和防空系统", "u": "https://ckxxapp.ckxx.net/pages/2026/06/08/e1ba6cc898c44758bbd15584e7b0b966.html", "s": "参考消息 (国际热点)"}, {"t": "美国就业数据引发通胀担忧", "u": "https://ckxxapp.ckxx.net/pages/2026/06/08/ea6456766bb9443bb417df933b81f3ca.html", "s": "参考消息 (国际热点)"}, {"t": "欧元区一季度经济环比萎缩", "u": "https://ckxxapp.ckxx.net/pages/2026/06/08/466fd24536ff4eadbdcf43937846b79e.html", "s": "参考消息 (国际热点)"}, {"t": "11岁女童遇害案让法国举国震怒", "u": "https://ckxxapp.ckxx.net/pages/2026/06/08/c2cbcd6993304e28b2a5f8c1c167acaa.html", "s": "参考消息 (国际热点)"}, {"t": "2026年中国高考有何特点？", "u": "https://ckxxapp.ckxx.net/pages/2026/06/08/ddd562cefbb54368976d71a618cf7ffb.html", "s": "参考消息 (国际热点)"}, {"t": "外媒：中国各地文旅比“流量”更要比“留量”", "u": "https://ckxxapp.ckxx.net/pages/2026/06/08/f76542158ec74ee78a1c365e52e97762.html", "s": "参考消息 (国际热点)"}, {"t": "阿联酋媒体：非洲日渐成为全球叙事重要“执笔人”", "u": "https://ckxxapp.ckxx.net/pages/2026/06/08/882c4652463a403688246ca000de27af.html", "s": "参考消息 (国际热点)"}, {"t": "外媒：中国成澳大利亚最大乘用车来源国", "u": "https://ckxxapp.ckxx.net/pages/2026/06/08/531023b6875a4d1b9091e296459ff4da.html", "s": "参考消息 (国际热点)"}, {"t": "东南亚国家航司增加C909执飞航线", "u": "https://ckxxapp.ckxx.net/pages/2026/06/08/02af4fd34e6d4749b330f2084f9b826b.html", "s": "参考消息 (国际热点)"}, {"t": "从挪威到西班牙，北约启动大规模空军演习", "u": "https://ckxxapp.ckxx.net/pages/2026/06/08/d483bf5d5c87488ca518f1a17461c178.html", "s": "参考消息 (国际热点)"}, {"t": "英法德表态支持俄乌直接谈判", "u": "https://ckxxapp.ckxx.net/pages/2026/06/08/f69b45f64af0447e8cedb10483582eca.html", "s": "参考消息 (国际热点)"}, {"t": "特朗普：“我从未承诺不发动战争”", "u": "https://ckxxapp.ckxx.net/pages/2026/06/08/a0c952cbdf04475aa14ca30f296036bf.html", "s": "参考消息 (国际热点)"}, {"t": "美拟动用伊朗资产赔偿海湾盟友，伊朗强硬回应", "u": "https://ckxxapp.ckxx.net/pages/2026/06/08/7fb48c1e2a8d4da4870847b273afdc8f.html", "s": "参考消息 (国际热点)"}, {"t": "世卫组织与非洲疾控中心联合启动埃博拉疫情应对计划", "u": "https://ckxxapp.ckxx.net/pages/2026/06/08/7db7e1b995404cfab018cb4737ed6a82.html", "s": "参考消息 (国际热点)"}, {"t": "日各地议会要求高市政府坚持“无核三原则”", "u": "https://ckxxapp.ckxx.net/pages/2026/06/08/b9db2cfc99e9462aad1552e15579eee4.html", "s": "参考消息 (国际热点)"}, {"t": "日本陆上自卫队举行最大规模实弹军演", "u": "https://ckxxapp.ckxx.net/pages/2026/06/08/194dec878c9845c0912bb82e069b4aab.html", "s": "参考消息 (国际热点)"}, {"t": "被主持人激怒，特朗普电视节目中提前离场", "u": "https://ckxxapp.ckxx.net/pages/2026/06/08/8b41d122da7c4d14875653bf5e9fcbba.html", "s": "参考消息 (国际热点)"}, {"t": "联合国教科文组织新认定14处生物圈保护区", "u": "https://ckxxapp.ckxx.net/pages/2026/06/08/9b2915423aa3421495430a58558ca6ba.html", "s": "参考消息 (国际热点)"}, {"t": "大陆赠台小熊猫顺利抵台", "u": "https://ckxxapp.ckxx.net/pages/2026/06/07/2a3fe29b91a7478fb837afb017eb966a.html", "s": "参考消息 (国际热点)"}, {"t": "美一监督机构发布报告称白宫宴会厅捐资方“从政府获利”", "u": "https://ckxxapp.ckxx.net/pages/2026/06/08/28ac20b50bb64d52a4715b10e2f9b4f1.html", "s": "参考消息 (国际热点)"}, {"t": "美法官推翻政府多项移民政策", "u": "https://ckxxapp.ckxx.net/pages/2026/06/08/e7e364f54d32450c8294b00cb5945551.html", "s": "参考消息 (国际热点)"}, {"t": "伊朗袭击以色列后，特朗普要求以总理不要报复", "u": "https://ckxxapp.ckxx.net/pages/2026/06/08/e8f6765b9c674e179b2343af2b365cf3.html", "s": "参考消息 (国际热点)"}, {"t": "日本“自导自演”式搞事，被日媒看穿了", "u": "https://ckxxapp.ckxx.net/pages/2026/06/08/cd78d44b1ee243b1b357bdb8f05ef2b6.html", "s": "参考消息 (国际热点)"}, {"t": "墨总统：绝不能让美国替墨西哥做决定", "u": "https://ckxxapp.ckxx.net/pages/2026/06/07/c798cb65b6004cd596d263f347cce063.html", "s": "参考消息 (国际热点)"}, {"t": "俄媒透露“普京-特朗普隧道”相关设想", "u": "https://ckxxapp.ckxx.net/pages/2026/06/07/062131434d6e4bc2be683ee59c10eef7.html", "s": "参考消息 (国际热点)"}, {"t": "乌军频繁对圣彼得堡发动无人机袭击", "u": "https://ckxxapp.ckxx.net/pages/2026/06/07/31c6d996c01948ee916a957cc0005041.html", "s": "参考消息 (国际热点)"}, {"t": "俄驻华大使：学习两国语言有助中俄务实合作", "u": "https://ckxxapp.ckxx.net/pages/2026/06/07/7cb732469d7a41739e29260263906516.html", "s": "参考消息 (国际热点)"}, {"t": "默茨担心德国极右翼在选举中获“大爆炸”式胜利", "u": "https://ckxxapp.ckxx.net/pages/2026/06/07/3d271dbc2f2e48e387aa2cad61d66a0b.html", "s": "参考消息 (国际热点)"}, {"t": "美媒：以军在阿塞拜疆设对伊行动秘密据点", "u": "https://ckxxapp.ckxx.net/pages/2026/06/07/25f08c71353e41bd8e18a1f571266ee6.html", "s": "参考消息 (国际热点)"}, {"t": "美国将比亚迪、百度、阿里巴巴等中国科技巨头列入“涉军”名单", "u": "https://sputniknews.cn/20260609/1071760373.html", "s": "卫星通讯社"}, {"t": "俄外交部批评西方智库有关建立巴勒斯坦与阿拉伯国家联系国的想法", "u": "https://sputniknews.cn/20260609/1071760273.html", "s": "卫星通讯社"}, {"t": "若加拿大歉收 俄罗斯可以增加对华豆类作物的出口量", "u": "https://sputniknews.cn/20260609/1071760154.html", "s": "卫星通讯社"}, {"t": "俄科学院：中国将1.5克月球背面土壤移交给俄罗斯", "u": "https://sputniknews.cn/20260609/1071759940.html", "s": "卫星通讯社"}, {"t": "莫斯科法院经缺席审理后以传播有关俄武装部队虚假新闻的罪名判处商人霍多尔科夫斯基10年监禁", "u": "https://sputniknews.cn/20260609/1071759826.html", "s": "卫星通讯社"}, {"t": "特朗普认为以色列不会再次打击伊朗", "u": "https://sputniknews.cn/20260609/1071759706.html", "s": "卫星通讯社"}, {"t": "俄符拉迪沃斯托克的托卡列夫斯基灯塔完成改造", "u": "https://sputniknews.cn/20260609/1071759596.html", "s": "卫星通讯社"}, {"t": "以军称拦截也门可疑空中目标", "u": "https://sputniknews.cn/20260609/1071759381.html", "s": "卫星通讯社"}, {"t": "特朗普警告称可能停止对内塔尼亚胡的支持", "u": "https://sputniknews.cn/20260609/1071759255.html", "s": "卫星通讯社"}, {"t": "俄副外长：俄白可采取包括核手段在内的一切措施应对北约", "u": "https://sputniknews.cn/20260609/1071759143.html", "s": "卫星通讯社"}, {"t": "美媒：泽连斯基与威特科夫和库什纳通电话", "u": "https://sputniknews.cn/20260609/1071759043.html", "s": "卫星通讯社"}, {"t": "俄常驻联合国代表：泽连斯基写给普京的公开信是一次笨拙的挑衅", "u": "https://sputniknews.cn/20260609/1071758937.html", "s": "卫星通讯社"}, {"t": "俄常驻联合国代表表示乌军在叶纳基耶沃袭击客车又是一起血腥罪行", "u": "https://sputniknews.cn/20260609/1071758833.html", "s": "卫星通讯社"}, {"t": "医务人员：伊朗有15人在以色列最新的袭击中受伤", "u": "https://sputniknews.cn/20260609/1071758727.html", "s": "卫星通讯社"}, {"t": "美军战机发射导弹 瘫痪试图驶往伊朗的“M/T Marivex”号油轮", "u": "https://sputniknews.cn/20260609/1071758636.html", "s": "卫星通讯社"}, {"t": "顿涅茨克人民共和国行政长官：过去一日乌军袭击顿涅茨克人民共和国造成1名平民死亡、2人受伤", "u": "https://sputniknews.cn/20260609/1071758528.html", "s": "卫星通讯社"}, {"t": "俄原子能公司：国际原子能机构确认保证“安静制度”以维修扎波罗热核电站输电线路", "u": "https://sputniknews.cn/20260609/1071758422.html", "s": "卫星通讯社"}, {"t": "俄常驻欧安组织代表：欧安组织内的一些欧洲国家非正式承认有必要与俄罗斯恢复对话", "u": "https://sputniknews.cn/20260609/1071758323.html", "s": "卫星通讯社"}, {"t": "俄常驻维也纳国际组织代表：美国关于伊朗问题的决议草案将责任推卸给受害者", "u": "https://sputniknews.cn/20260609/1071758094.html", "s": "卫星通讯社"}, {"t": "俄罗斯常驻联合国副代表：俄罗斯主张对阿富汗采取务实、全面的方案", "u": "https://sputniknews.cn/20260609/1071757854.html", "s": "卫星通讯社"}, {"t": "新华社：中朝关系站在新的历史起点", "u": "https://www.zaochenbao.com/news/china/202606/0973705.html", "s": "联合早报"}, {"t": "习近平和彭丽媛观看朝鲜专场文艺演出", "u": "https://www.zaochenbao.com/news/china/202606/0973704.html", "s": "联合早报"}, {"t": "郭兵云：三重视角下的“中美建设性战略稳定关系”", "u": "https://www.zaochenbao.com/news/opinion/202606/0973703.html", "s": "联合早报"}, {"t": "洛厄尔·包蒂斯塔 阿列斯·阿鲁盖：2016年南中国海仲裁裁决并非无用", "u": "https://www.zaochenbao.com/news/opinion/202606/0973702.html", "s": "联合早报"}, {"t": "王庆民：韩国地方选举争议与“谣言政治”的盛行", "u": "https://www.zaochenbao.com/news/opinion/202606/0973701.html", "s": "联合早报"}, {"t": "谢伟铿：慎防反AI情绪形成风暴", "u": "https://www.zaochenbao.com/news/opinion/202606/0973700.html", "s": "联合早报"}, {"t": "美国五角大楼更新中国涉军企业清单", "u": "https://www.zaochenbao.com/news/politics/202606/0973699.html", "s": "联合早报"}, {"t": "分析：聚焦战略协作未谈无核化 中国对朝政策现微妙变化", "u": "https://www.zaochenbao.com/news/politics/202606/0973698.html", "s": "联合早报"}, {"t": "以色列伊朗两月来首次直接交火", "u": "https://www.zaochenbao.com/news/politics/202606/0973697.html", "s": "联合早报"}, {"t": "时隔七年后习近平访朝聚焦双边与战略协作 未提无核化", "u": "https://www.zaochenbao.com/news/china/202606/0973696.html", "s": "联合早报"}, {"t": "陈婧：又是一年高考时", "u": "https://www.zaochenbao.com/news/china/202606/0973695.html", "s": "联合早报"}, {"t": "菲律宾近50年最强地震夺35命 数万人流离失所", "u": "https://www.zaochenbao.com/news/world/202606/0973694.html", "s": "联合早报"}, {"t": "报告：柬埔寨宣称打击电诈一年取得成功 窝点不减反增", "u": "https://www.zaochenbao.com/news/world/202606/0973693.html", "s": "联合早报"}, {"t": "暴雨天气接受专访 特朗普被提问激怒中断访问离场", "u": "https://www.zaochenbao.com/news/politics/202606/0873692.html", "s": "联合早报"}, {"t": "IT公司负责人爆料：曾受高市秘书委托制作攻击小泉视频", "u": "https://www.zaochenbao.com/news/politics/202606/0873691.html", "s": "联合早报"}, {"t": "习近平：与金正恩达重要共识 加强高层交往拓展务实合作", "u": "https://www.zaochenbao.com/news/china/202606/0873690.html", "s": "联合早报"}, {"t": "美智库：中国航天业正缩小与美国创新差距", "u": "https://www.zaochenbao.com/news/politics/202606/0873689.html", "s": "联合早报"}, {"t": "中国官媒曝企业用拖鞋边角料等做“回料” 制作酒店用一次性牙刷", "u": "https://www.zaochenbao.com/news/china/202606/0873688.html", "s": "联合早报"}, {"t": "与中企合作公司标得阿根廷关键水道升级项目 美支持竞标方落选", "u": "https://www.zaochenbao.com/news/china/202606/0873687.html", "s": "联合早报"}, {"t": "港府拟订附属法例 特首可认定刑事案涉危害国安", "u": "https://www.zaochenbao.com/news/hkMacao/202606/0873686.html", "s": "联合早报"}, {"t": "大陆在台湾东部海域专项执法 台防长批挑衅", "u": "https://www.zaochenbao.com/news/taiwan/202606/0873685.html", "s": "联合早报"}, {"t": "中国2026高考消费升温 去年整体规模逾320亿元人民币", "u": "https://www.zaochenbao.com/news/china/202606/0873684.html", "s": "联合早报"}, {"t": "欧盟制裁伊朗革命卫队海军及石油出口代表", "u": "https://www.zaochenbao.com/news/politics/202606/0873683.html", "s": "联合早报"}, {"t": "联合国促塔利班停止拘留涉违反着装规定女性", "u": "https://www.zaochenbao.com/news/politics/202606/0873682.html", "s": "联合早报"}, {"t": "三峡工程以来长江上最大工程 三峡水运新通道正式开工", "u": "https://www.zaochenbao.com/news/china/202606/0873677.html", "s": "联合早报"}, {"t": "落马逾半年后 新疆政府原常务副主席陈伟俊被“双开”", "u": "https://www.zaochenbao.com/news/china/202606/0873676.html", "s": "联合早报"}, {"t": "香港警方世界杯期间加强打击非法賭博", "u": "https://www.zaochenbao.com/news/hkMacao/202606/0873672.html", "s": "联合早报"}, {"t": "台无党籍立委高金素梅涉诈领助理费等案被起诉", "u": "https://www.zaochenbao.com/news/taiwan/202606/0873663.html", "s": "联合早报"}, {"t": "董事长陷桃色新闻 胜宏科技市值蒸发200亿", "u": "https://www.zaochenbao.com/news/Chronicles/202606/0873660.html", "s": "联合早报"}, {"t": "中央批准 开除原浙江省副省长陈伟俊党籍", "u": "https://www.zaochenbao.com/news/Chronicles/202606/0873656.html", "s": "联合早报"}, {"t": "芯片股力撑美股反弹，半导体指数涨超5%，英特尔大涨11%，中东局势缓和，原油冲高回落", "u": "https://wallstreetcn.com/articles/3774056", "s": "华尔街见闻"}, {"t": "华尔街见闻早餐FM-Radio | 2026年6月9日", "u": "https://wallstreetcn.com/articles/3774157", "s": "华尔街见闻"}, {"t": "“你应该感到高兴！”黄仁勋力挺AI：暴跌后终于能打折买了", "u": "https://wallstreetcn.com/articles/3774087", "s": "华尔街见闻"}, {"t": "苹果WWDC 2026：Siri AI姗姗来迟，Apple Intelligence全面升级，OS集体迈入27版，股价盘中转跌", "u": "https://wallstreetcn.com/articles/3774148", "s": "华尔街见闻"}, {"t": "韩国总统李在明： 我认为韩国股市目前仍被低估", "u": "https://wallstreetcn.com/articles/3774067", "s": "华尔街见闻"}, {"t": "纽约联储调查：美国求职者前景预期恶化，通胀预期小幅回落，家庭财务前景创4年最差", "u": "https://wallstreetcn.com/articles/3774144", "s": "华尔街见闻"}, {"t": "特朗普“积极介入斡旋”后，伊朗宣布对以打击“告一段落”", "u": "https://wallstreetcn.com/articles/3774122", "s": "华尔街见闻"}, {"t": "英特尔盘前涨超14%，报道：谷歌拟下单三百万AI芯片、英伟达测试其18A工艺", "u": "https://wallstreetcn.com/articles/3774134", "s": "华尔街见闻"}, {"t": "以伊军事冲突升级，特朗普：双方“正寻求”立即停火", "u": "https://wallstreetcn.com/articles/3774115", "s": "华尔街见闻"}, {"t": "创业板重挫超3%，芯片半导体集体下跌，机器人逆势拉升，恒科指跌超2%，沪银狂泻10%", "u": "https://wallstreetcn.com/articles/3774065", "s": "华尔街见闻"}, {"t": "【早报】美股芯片、光通信股全线反弹，半导体指数大涨5.6%；油价冲高回落，金银探底企稳", "u": "https://www.cls.cn/detail/2394225", "s": "财联社"}, {"t": "国家层面首次系统性部署 高质量数据集成物理AI时代“新石油”", "u": "https://www.cls.cn/detail/2393919", "s": "财联社"}, {"t": "全球科技股急跌，黄仁勋喊话：能折价买股票 你应该感到高兴", "u": "https://www.cls.cn/detail/2393791", "s": "财联社"}, {"t": "美股收盘：芯片股反弹费城指数升超5% 存储、光通信概念齐走强", "u": "https://www.cls.cn/detail/2394207", "s": "财联社"}, {"t": "苹果智能全面升级：AI深度整合全生态 新版本Siri登场", "u": "https://www.cls.cn/detail/2394196", "s": "财联社"}, {"t": "接连跌停，市值蒸发400亿！算力明星股利通电子回应“小作文”传言", "u": "https://www.cls.cn/detail/2394138", "s": "财联社"}, {"t": "“国产GPU四小龙”或凑齐最后一位资本市场“牌友” 燧原科技将于6月15日上会", "u": "https://www.cls.cn/detail/2394108", "s": "财联社"}, {"t": "“扫货”电解液，宁德时代在下一盘什么棋？", "u": "https://www.cls.cn/detail/2393941", "s": "财联社"}, {"t": "中东炮火暂歇 美股期指回血 苹果WWDC接棒登场 | 今夜看点", "u": "https://www.cls.cn/detail/2393996", "s": "财联社"}, {"t": "外围股市拖累A股大跌，公募一线解读：急跌如何应对？", "u": "https://www.cls.cn/detail/2393946", "s": "财联社"}, {"t": "OpenAI官宣已递交IPO申请文件 AI巨头资本大战或全面打响", "u": "https://www.cls.cn/detail/2394212", "s": "财联社"}, {"t": "6月9日投资避雷针：天娱数科、中望软件等公司密集澄清 没有物理AI业务", "u": "https://www.cls.cn/detail/2394258", "s": "财联社"}, {"t": "微信新功能：朋友圈能搜索了", "u": "https://www.cls.cn/detail/2394070", "s": "财联社"}, {"t": "美光科技", "u": "https://xueqiu.com/s/MU", "s": "雪球"}, {"t": "紫金矿业", "u": "https://xueqiu.com/s/SH601899", "s": "雪球"}, {"t": "胜宏科技", "u": "https://xueqiu.com/s/SZ300476", "s": "雪球"}, {"t": "中际旭创", "u": "https://xueqiu.com/s/SZ300308", "s": "雪球"}, {"t": "英伟达", "u": "https://xueqiu.com/s/NVDA", "s": "雪球"}, {"t": "英特尔", "u": "https://xueqiu.com/s/INTC", "s": "雪球"}, {"t": "药明康德", "u": "https://xueqiu.com/s/SH603259", "s": "雪球"}, {"t": "迈威尔科技", "u": "https://xueqiu.com/s/MRVL", "s": "雪球"}, {"t": "京东方A", "u": "https://xueqiu.com/s/SZ000725", "s": "雪球"}, {"t": "五粮液", "u": "https://xueqiu.com/s/SZ000858", "s": "雪球"}, {"t": "特斯拉", "u": "https://xueqiu.com/s/TSLA", "s": "雪球"}, {"t": "中船特气", "u": "https://xueqiu.com/s/SH688146", "s": "雪球"}, {"t": "麦格米特", "u": "https://xueqiu.com/s/SZ002851", "s": "雪球"}, {"t": "腾讯控股", "u": "https://xueqiu.com/s/00700", "s": "雪球"}, {"t": "泡泡玛特", "u": "https://xueqiu.com/s/09992", "s": "雪球"}, {"t": "ST派瑞", "u": "https://xueqiu.com/s/SZ300831", "s": "雪球"}, {"t": "顺络电子", "u": "https://xueqiu.com/s/SZ002138", "s": "雪球"}, {"t": "圣泉集团", "u": "https://xueqiu.com/s/SH605589", "s": "雪球"}, {"t": "苹果", "u": "https://xueqiu.com/s/AAPL", "s": "雪球"}, {"t": "豪恩汽电", "u": "https://xueqiu.com/s/SZ301488", "s": "雪球"}, {"t": "兆易创新", "u": "https://xueqiu.com/s/SH603986", "s": "雪球"}, {"t": "XL二南方海力士", "u": "https://xueqiu.com/s/07709", "s": "雪球"}, {"t": "中天科技", "u": "https://xueqiu.com/s/SH600522", "s": "雪球"}, {"t": "中国神华", "u": "https://xueqiu.com/s/SH601088", "s": "雪球"}, {"t": "铂科新材", "u": "https://xueqiu.com/s/SZ300811", "s": "雪球"}, {"t": "澜起科技", "u": "https://xueqiu.com/s/SH688008", "s": "雪球"}, {"t": "龙磁科技", "u": "https://xueqiu.com/s/SZ300835", "s": "雪球"}, {"t": "贵州茅台", "u": "https://xueqiu.com/s/SH600519", "s": "雪球"}, {"t": "沃格光电", "u": "https://xueqiu.com/s/SH603773", "s": "雪球"}, {"t": "康宁", "u": "https://xueqiu.com/s/GLW", "s": "雪球"}, {"t": "航行警告！黄海海域实弹射击", "u": "https://flash.jin10.com/detail/20260609090456385800", "s": "金十数据"}, {"t": "财政部将于6月在香港发行150亿元人民币国债", "u": "https://flash.jin10.com/detail/20260609090414895800", "s": "金十数据"}, {"t": "上海黄金交易所黄金T+D 6月9日（周二）早盘盘初下跌0.21%报945.15元/克；<br/>上海黄金交易所白银T+D 6月9日（周二）早盘盘初下跌0.14%报16313.0元/千克。", "u": "https://flash.jin10.com/detail/20260609090255047800", "s": "金十数据"}, {"t": "台湾加权指数6月9日（周二）开盘上涨467.38点，涨幅1.07%，报43970.16点。", "u": "https://flash.jin10.com/detail/20260609090253053800", "s": "金十数据"}, {"t": "富时中国A50指数期货转跌。", "u": "https://flash.jin10.com/detail/20260609090220308800", "s": "金十数据"}, {"t": "工信部、国资委联合开展2026年度人形机器人与具身智能实景实训专项行动", "u": "https://flash.jin10.com/detail/20260609090040601800", "s": "金十数据"}, {"t": "富时中国A50指数期货开涨0.06%。", "u": "https://flash.jin10.com/detail/20260609090008865800", "s": "金十数据"}, {"t": "早盘开盘，国内期货主力合约涨跌不一，焦煤跌超6%，焦炭跌超3%，燃料油、烧碱、低硫燃料油（LU）跌超2%，尿素跌近2%，钯、沪银、液化石油气（LPG）跌超1%。涨幅方面，集运欧线、PTA、淀粉、对二甲苯涨超1%，瓶片、玉米涨近1%。", "u": "https://flash.jin10.com/detail/20260609090001868800", "s": "金十数据"}, {"t": "和顺科技6月9日在互动平台回复称，公司MLCC基膜当前正与下游涂布厂商协同优化工艺、推进多轮送样及客户认证。目前相关产品暂未产生收入，对公司业绩暂无重大影响。", "u": "https://flash.jin10.com/detail/20260609085853255800", "s": "金十数据"}, {"t": "美银警告：美股70%熊市信号已触发，是时候获利了结", "u": "https://flash.jin10.com/detail/20260609085845717800", "s": "金十数据"}, {"t": "日经225指数回吐涨幅，现跌0.15%。", "u": "https://flash.jin10.com/detail/20260609085752310800", "s": "金十数据"}, {"t": "金十数据整理：每日港股市场要闻速递（2026-06-09）", "u": "https://flash.jin10.com/detail/20260609085740531800", "s": "金十数据"}, {"t": "财通福鑫定开混合：将于2026年6月9日开盘起至当日10:30停牌。", "u": "https://flash.jin10.com/detail/20260609085312812800", "s": "金十数据"}, {"t": "日本20年期国债收益率上升2.5个基点，达到3.660%。", "u": "https://flash.jin10.com/detail/20260609085101694800", "s": "金十数据"}, {"t": "日本30年期国债收益率上升3.0个基点，至3.965%。", "u": "https://flash.jin10.com/detail/20260609084927000800", "s": "金十数据"}, {"t": "美元兑韩元日内跌0.9%，报1,521.90。", "u": "https://flash.jin10.com/detail/20260609084709870800", "s": "金十数据"}, {"t": "两市融资余额减少233.57亿元", "u": "https://flash.jin10.com/detail/20260609084707324800", "s": "金十数据"}, {"t": "泽连斯基：与美国特使进行了“积极对话”，或在G7峰会期间推动谈判", "u": "https://flash.jin10.com/detail/20260609084644675800", "s": "金十数据"}, {"t": "期货盯盘神器专属文章", "u": "https://flash.jin10.com/detail/20260609084638050800", "s": "金十数据"}, {"t": "金十数据整理：隔日全球股市走势回顾（2026-06-09）", "u": "https://flash.jin10.com/detail/20260609084028564800", "s": "金十数据"}, {"t": "金十图示：2026年06月09日（周二）投机情绪指数", "u": "https://flash.jin10.com/detail/20260609084016606800", "s": "金十数据"}, {"t": "日本10年期国债收益率上升2.5个基点，至2.740%。", "u": "https://flash.jin10.com/detail/20260609083531952800", "s": "金十数据"}, {"t": "日本财务大臣片山皋月：我们准备采取果断行动的立场没有改变。", "u": "https://flash.jin10.com/detail/20260609083302842800", "s": "金十数据"}, {"t": "现货白银日内走低1.00%，现报67.47美元/盎司。<font class=\"important-text\"></font>", "u": "https://flash.jin10.com/detail/20260609083249704800", "s": "金十数据"}, {"t": "日本财务大臣片山皋月：相信可以在财政可持续性与促进经济的措施之间实现平衡。", "u": "https://flash.jin10.com/detail/20260609083121797800", "s": "金十数据"}, {"t": "韩国交易所启动KOSDAQ买盘临时停牌机制，程序交易暂停5分钟。", "u": "https://flash.jin10.com/detail/20260609083049724800", "s": "金十数据"}, {"t": "澳大利亚6月西太平洋/墨尔本消费者信心指数 80.6，前值83。", "u": "https://flash.jin10.com/detail/20260609083019805800", "s": "金十数据"}, {"t": "得物与微信就AI Agent达成首批合作", "u": "https://www.36kr.com/newsflashes/3845237188774401", "s": "36氪 (商业/科技)"}, {"t": "中金2026下半年展望：新能源车中游上行周期趋势不改，基本面与新技术共振", "u": "https://www.36kr.com/newsflashes/3845236404095489", "s": "36氪 (商业/科技)"}, {"t": "两市融资余额减少233.57亿元", "u": "https://www.36kr.com/newsflashes/3845227141564676", "s": "36氪 (商业/科技)"}, {"t": "瑞银在全球重组中将亚洲ESG员工人数减半", "u": "https://www.36kr.com/newsflashes/3845217942128897", "s": "36氪 (商业/科技)"}, {"t": "韩国交易所启动KOSDAQ买盘临时停牌机制，程序交易暂停5分钟", "u": "https://www.36kr.com/newsflashes/3845211902429449", "s": "36氪 (商业/科技)"}, {"t": "银河证券：预计年内房地产市场有望止跌企稳", "u": "https://www.36kr.com/newsflashes/3845206855911689", "s": "36氪 (商业/科技)"}, {"t": "黑芝麻智能与上实科技达成战略合作", "u": "https://www.36kr.com/newsflashes/3845200293202180", "s": "36氪 (商业/科技)"}, {"t": "中信建投：当前全球AI算力基建的订单能见度仍比较高，依旧看好AI产业链", "u": "https://www.36kr.com/newsflashes/3845195819124997", "s": "36氪 (商业/科技)"}, {"t": "黄河实业：与独立第三方就一项自主智能式人工智慧金融科技业务的潜在投资进行讨论", "u": "https://www.36kr.com/newsflashes/3845190239176964", "s": "36氪 (商业/科技)"}, {"t": "中信建投：券商投资正进入一个以深度研究驱动的α新时代", "u": "https://www.36kr.com/newsflashes/3845185064864263", "s": "36氪 (商业/科技)"}, {"t": "日本电信巨头NTT拟设立规模5亿美元的光网络基金", "u": "https://www.36kr.com/newsflashes/3845181836232968", "s": "36氪 (商业/科技)"}, {"t": "上市险企二季度有望迎来盈利修复", "u": "https://www.36kr.com/newsflashes/3845179316865545", "s": "36氪 (商业/科技)"}, {"t": "马斯克谈SpaceX未来规划，展示AI数据中心卫星更多细节", "u": "https://www.36kr.com/newsflashes/3845178784434688", "s": "36氪 (商业/科技)"}, {"t": "中信证券：锂价在2026年下半年仍有望走强", "u": "https://www.36kr.com/newsflashes/3845178401933832", "s": "36氪 (商业/科技)"}, {"t": "从电力管家到散热高手，碳化硅全产业链供需两旺", "u": "https://www.36kr.com/newsflashes/3845177527585285", "s": "36氪 (商业/科技)"}, {"t": "中信证券：汽车智驾渗透率高增，产业链盈利向上", "u": "https://www.36kr.com/newsflashes/3845176795203844", "s": "36氪 (商业/科技)"}, {"t": "三重突破正在激活券商板块投资价值", "u": "https://www.36kr.com/newsflashes/3845174845049344", "s": "36氪 (商业/科技)"}, {"t": "中信证券：“固收+”规模持续扩张，理财显著增加高弹性产品配置", "u": "https://www.36kr.com/newsflashes/3845174172207362", "s": "36氪 (商业/科技)"}, {"t": "中信证券：宏观经济维度看好央国企、能源板块", "u": "https://www.36kr.com/newsflashes/3845171920325124", "s": "36氪 (商业/科技)"}, {"t": "SpaceX、OpenAI、Anthropic相继推进上市进程，全球超级IPO潮或重塑市场预期", "u": "https://www.36kr.com/newsflashes/3845169671850247", "s": "36氪 (商业/科技)"}, {"t": "蚂蚁电竞推出“ANT273PQL PRO”27 英寸显示器：2K 320Hz，底座机械臂需单独购买", "u": "https://www.ithome.com/0/961/745.htm", "s": "IT之家"}, {"t": "美国得州农民捐地约定建公园，被当地政府千万美元转卖建数据中心", "u": "https://www.ithome.com/0/961/744.htm", "s": "IT之家"}, {"t": "零刻 NAS 迷你主机 ME Pro 开售 13500H 款：2+4 盘位，2569 元起", "u": "https://www.ithome.com/0/961/743.htm", "s": "IT之家"}, {"t": "《女神异闻录４ Revival》开启游戏预购：Steam 国区 298 元起，明年 2 月 18 日发售", "u": "https://www.ithome.com/0/961/742.htm", "s": "IT之家"}, {"t": "保险公司报告：美国 6700 亿美元待建数据中心面临强对流风暴威胁", "u": "https://www.ithome.com/0/961/739.htm", "s": "IT之家"}, {"t": "多地公布 2026 高考查分时间，教育部“阳光志愿”信息服务系统将优化升级", "u": "https://www.ithome.com/0/961/737.htm", "s": "IT之家"}, {"t": "研究：特斯拉行驶里程突破 40 万公里的概率高于多数燃油车", "u": "https://www.ithome.com/0/961/736.htm", "s": "IT之家"}, {"t": "投票：苹果 iOS 27 正式公布，你尝鲜了吗？还满意吗？", "u": "https://www.ithome.com/0/961/735.htm", "s": "IT之家"}, {"t": "Game Pass 因涨价而流失数百万订阅用户，微软承认 Xbox 业务目前不健康", "u": "https://www.ithome.com/0/961/734.htm", "s": "IT之家"}, {"t": "升级 \"Twin Lake\"：GPD 推出 N350 版 MicroPC 2 迷你掌上笔记本电脑", "u": "https://www.ithome.com/0/961/733.htm", "s": "IT之家"}, {"t": "苹果 iOS 27 健康应用升级，新增围绝经期与绝经期追踪功能", "u": "https://www.ithome.com/0/961/732.htm", "s": "IT之家"}, {"t": "停车可观影，苹果 iOS 27 为 CarPlay 带来视频播放功能", "u": "https://www.ithome.com/0/961/731.htm", "s": "IT之家"}, {"t": "IT早报 0609：华为余承东官宣尊界 V800；库克 WWDC 收官演讲苹果 iOS 27 发布；腾讯 QQ 回应为何不显示华为 5A 在线状态；总台曝光小作坊翻新牙刷...", "u": "https://www.ithome.com/0/961/730.htm", "s": "IT之家"}, {"t": "消息称三星 Galaxy Z 8 系列折叠屏手机今年出货目标降至 500~600 万部", "u": "https://www.ithome.com/0/961/728.htm", "s": "IT之家"}, {"t": "苹果修正列表：Apple Watch Series 9 确认兼容 watchOS 27", "u": "https://www.ithome.com/0/961/729.htm", "s": "IT之家"}, {"t": "从“画饼”到实机展示，苹果 WWDC26 改变 AI 功能演示方式", "u": "https://www.ithome.com/0/961/727.htm", "s": "IT之家"}, {"t": "赛力斯“赛豆科技”全新品牌 AIVA 官宣：车标样式曝光，全系标配豆包大模型智能座舱", "u": "https://www.ithome.com/0/961/726.htm", "s": "IT之家"}, {"t": "街未觉醒带来 LS5 迷你主机：前进后出风道，内部推拉结构", "u": "https://www.ithome.com/0/961/725.htm", "s": "IT之家"}, {"t": "Meta 智能眼镜暗藏人脸识别代码，曝光仅一天后被紧急移除", "u": "https://www.ithome.com/0/961/724.htm", "s": "IT之家"}, {"t": "三星电子全永铉：正与英伟达商讨下一代 Groq LPU 合作事宜", "u": "https://www.ithome.com/0/961/723.htm", "s": "IT之家"}, {"t": "苹果 WWDC26 主题演讲一文汇总：iOS 27 等新系统发布、Siri AI 登场，库克迎来生涯“最后一舞”", "u": "https://www.ithome.com/0/961/722.htm", "s": "IT之家"}, {"t": "奥尔特曼宣布 OpenAI 进入第三发展阶段：让 AI 普及、易用且安全", "u": "https://www.ithome.com/0/961/721.htm", "s": "IT之家"}, {"t": "苹果 iOS 27 引入 4×6 超大号小组件", "u": "https://www.ithome.com/0/961/720.htm", "s": "IT之家"}, {"t": "首期聚焦 Intel 14A：Cadence 扩大与英特尔代工 DTCO 合作", "u": "https://www.ithome.com/0/961/719.htm", "s": "IT之家"}, {"t": "苹果回应“套壳 Gemini”猜测：iOS 27 版 Siri AI AFM 自研打造", "u": "https://www.ithome.com/0/961/718.htm", "s": "IT之家"}, {"t": "苹果 macOS 27 提升超宽屏显示器体验，支持 5K 120Hz 等分辨率", "u": "https://www.ithome.com/0/961/717.htm", "s": "IT之家"}, {"t": "苹果 iOS 27 悄悄更新中文输入法：标点建议和联想词更准确，找生僻字更方便", "u": "https://www.ithome.com/0/961/716.htm", "s": "IT之家"}, {"t": "iOS 27 首个代码证据曝光，苹果已开始系统适配其首款折叠 iPhone", "u": "https://www.ithome.com/0/961/715.htm", "s": "IT之家"}, {"t": "OpenAI 已提交 S-1 草案，释放潜在 IPO 上市信号", "u": "https://www.ithome.com/0/961/714.htm", "s": "IT之家"}, {"t": "苹果 iOS 27 大改 Genmoji 自定义表情功能，可微调描述语言", "u": "https://www.ithome.com/0/961/713.htm", "s": "IT之家"}, {"t": "kingbase备份与恢复实战（七）—— 恢复演练与验收：从“能恢复”到“可交付预案”", "u": "https://juejin.cn/post/7648121330443812864", "s": "掘金"}, {"t": "Android 17 内存管理将严格管控，App 要注意适配", "u": "https://juejin.cn/post/7647356541462806580", "s": "掘金"}, {"t": "保姆级教程：如何0成本调用千问3.6大模型？讯飞星辰MaaS平台上手指南", "u": "https://juejin.cn/post/7648157267778486287", "s": "掘金"}, {"t": "我用Codex开发的第一个朋友圈九宫格素材小程序上线啦", "u": "https://juejin.cn/post/7648545475571564563", "s": "掘金"}, {"t": "真正的跨平台 AI 自动化框架，甚至还支持鸿蒙", "u": "https://juejin.cn/post/7648520470531473471", "s": "掘金"}, {"t": "重磅：继SDK、NDK后谷歌新推出ADK！", "u": "https://juejin.cn/post/7647438301877501978", "s": "掘金"}, {"t": "程序员副业 | 2026年5月复盘", "u": "https://juejin.cn/post/7648120903580647467", "s": "掘金"}, {"t": "基于 superpowers 实现复杂前端改造", "u": "https://juejin.cn/post/7647868075887345674", "s": "掘金"}, {"t": "拆解与 AI 的一次对话", "u": "https://juejin.cn/post/7647825202339987465", "s": "掘金"}, {"t": "我主动放弃了一半用户，只为了给剩下的人做一个95分的功能", "u": "https://juejin.cn/post/7647882996956626998", "s": "掘金"}, {"t": "__proto__ vs prototype：90% 的人分不清的 JavaScript 核心", "u": "https://juejin.cn/post/7648213611392172051", "s": "掘金"}, {"t": "Android 开发来看看 Kotlin 2.4.0 更新了个啥", "u": "https://juejin.cn/post/7647679272668676105", "s": "掘金"}, {"t": "为什么 Clean Architecture 能让 ViewModel 保持轻量？", "u": "https://juejin.cn/post/7647072739918184458", "s": "掘金"}, {"t": "Android 官方给 Compose 搞了个不需要 UI 环境的 Composable", "u": "https://juejin.cn/post/7648174967504404522", "s": "掘金"}, {"t": "iOS、Android、Flutter 2026 流行框架对比", "u": "https://juejin.cn/post/7648169201848401970", "s": "掘金"}, {"t": "我给 Claude Code 装了一个红绿灯，AI 干活还是摸鱼，一眼看穿", "u": "https://juejin.cn/post/7648054502554779698", "s": "掘金"}, {"t": "盛大集团面经（专升本毕业 9 个月,99%代码靠 AI 写）", "u": "https://juejin.cn/post/7648519141299339279", "s": "掘金"}, {"t": "Node.js + DeepSeek API 实战：用 Prompt 5分钟搞定 NLP 文本总结", "u": "https://juejin.cn/post/7647921947466367019", "s": "掘金"}, {"t": "每日一学V017：用 Prompt 做 NLP：解构赋值与 AI 全栈的第一次实战", "u": "https://juejin.cn/post/7647921947465777195", "s": "掘金"}, {"t": "别调 BERT 了：我用 Prompt 做了套 NLP 系统，20 分钟搞定", "u": "https://juejin.cn/post/7647918647206559763", "s": "掘金"}, {"t": "深入理解 JavaScript 执行机制：从编译到运行的完整揭秘", "u": "https://juejin.cn/post/7648082945086423086", "s": "掘金"}, {"t": "新手学前端JS浅拷贝和深拷贝：对象复制竟然是个“替身文学”？", "u": "https://juejin.cn/post/7647785782204104744", "s": "掘金"}, {"t": "Prompt 驱动 NLP 实战：用 LLM 构建文本推理系统", "u": "https://juejin.cn/post/7647852234256416783", "s": "掘金"}, {"t": "从能用到可靠：AI Agent 规范治理的工程实践", "u": "https://juejin.cn/post/7647862594847637547", "s": "掘金"}, {"t": "刚上线就斩获 2.3K 星标！AnySearch 搜索能力拉满！", "u": "https://juejin.cn/post/7647819908642914347", "s": "掘金"}, {"t": "Bun 都用 AI + Rust 重写了，咋不顺便把 Node.js 的 API 全兼容了？", "u": "https://juejin.cn/post/7648424256876658703", "s": "掘金"}, {"t": "5 个 Step，让你的前端代码连上 AI 大模型", "u": "https://juejin.cn/post/7647784370972819507", "s": "掘金"}, {"t": "为什么 Tiptap 做协同编辑离不开 Hocuspocus❓❓❓", "u": "https://juejin.cn/post/7647463706607550507", "s": "掘金"}, {"t": "Kotlin 2.4.0 正式稳定！Android 升级、Compose、KMP 全变化详解", "u": "https://juejin.cn/post/7648301796494426139", "s": "掘金"}, {"t": "如何节省你的token，请看CodeGraph", "u": "https://juejin.cn/post/7648643814988120107", "s": "掘金"}, {"t": "mvanhorn / last30days-skill", "u": "https://github.com/mvanhorn/last30days-skill", "s": "GitHub Trending"}, {"t": "RyanCodrai / turbovec", "u": "https://github.com/RyanCodrai/turbovec", "s": "GitHub Trending"}, {"t": "google / skills", "u": "https://github.com/google/skills", "s": "GitHub Trending"}, {"t": "refactoringhq / tolaria", "u": "https://github.com/refactoringhq/tolaria", "s": "GitHub Trending"}, {"t": "Panniantong / Agent-Reach", "u": "https://github.com/Panniantong/Agent-Reach", "s": "GitHub Trending"}, {"t": "danielmiessler / Personal_AI_Infrastructure", "u": "https://github.com/danielmiessler/Personal_AI_Infrastructure", "s": "GitHub Trending"}, {"t": "santifer / career-ops", "u": "https://github.com/santifer/career-ops", "s": "GitHub Trending"}, {"t": "phuryn / pm-skills", "u": "https://github.com/phuryn/pm-skills", "s": "GitHub Trending"}, {"t": "openai / plugins", "u": "https://github.com/openai/plugins", "s": "GitHub Trending"}, {"t": "Andyyyy64 / whichllm", "u": "https://github.com/Andyyyy64/whichllm", "s": "GitHub Trending"}, {"t": "MemPalace / mempalace", "u": "https://github.com/MemPalace/mempalace", "s": "GitHub Trending"}, {"t": "roboflow / supervision", "u": "https://github.com/roboflow/supervision", "s": "GitHub Trending"}, {"t": "CopilotKit / CopilotKit", "u": "https://github.com/CopilotKit/CopilotKit", "s": "GitHub Trending"}, {"t": "TapXWorld / ChinaTextbook", "u": "https://github.com/TapXWorld/ChinaTextbook", "s": "GitHub Trending"}, {"t": "luongnv89 / claude-howto", "u": "https://github.com/luongnv89/claude-howto", "s": "GitHub Trending"}, {"t": "aaif-goose / goose", "u": "https://github.com/aaif-goose/goose", "s": "GitHub Trending"}, {"t": "OpenAI Submits S-1 Draft to SEC", "u": "https://news.ycombinator.com/item?id=48452317", "s": "Hacker News (国际极客)"}, {"t": "Surveillance Is Not Safety: A statement on the UK's latest threat to privacy [pdf]", "u": "https://news.ycombinator.com/item?id=48450646", "s": "Hacker News (国际极客)"}, {"t": "Federal judge blocks H1B visa $100K fee", "u": "https://news.ycombinator.com/item?id=48454210", "s": "Hacker News (国际极客)"}, {"t": "Siri AI", "u": "https://news.ycombinator.com/item?id=48449084", "s": "Hacker News (国际极客)"}, {"t": "Show HN: Performative-UI – A react component library of design tropes", "u": "https://news.ycombinator.com/item?id=48445554", "s": "Hacker News (国际极客)"}, {"t": "MiMo-v2.5-Pro-UltraSpeed: 1T model with 1000 tokens per second", "u": "https://news.ycombinator.com/item?id=48446639", "s": "Hacker News (国际极客)"}, {"t": "Looking Forward to Postgres 19: Query Hints", "u": "https://news.ycombinator.com/item?id=48413655", "s": "Hacker News (国际极客)"}, {"t": "Apple Core AI Framework", "u": "https://news.ycombinator.com/item?id=48449665", "s": "Hacker News (国际极客)"}, {"t": "Anti-social: It's fads, not friends, which now dominate social media feeds", "u": "https://news.ycombinator.com/item?id=48444228", "s": "Hacker News (国际极客)"}, {"t": "Show HN: Gitdot – a better GitHub. Open-source, written in Rust", "u": "https://news.ycombinator.com/item?id=48447806", "s": "Hacker News (国际极客)"}, {"t": "EU-banned pesticides found in rice, tea and spices", "u": "https://news.ycombinator.com/item?id=48447062", "s": "Hacker News (国际极客)"}, {"t": "Why are cells small?", "u": "https://news.ycombinator.com/item?id=48450065", "s": "Hacker News (国际极客)"}, {"t": "xAI is looking more like a datacentre REIT than a frontier lab", "u": "https://news.ycombinator.com/item?id=48446428", "s": "Hacker News (国际极客)"}, {"t": "FrontierCode", "u": "https://news.ycombinator.com/item?id=48451723", "s": "Hacker News (国际极客)"}, {"t": "Ask HN: What are tools you have made for yourself since the advent of AI?", "u": "https://news.ycombinator.com/item?id=48449187", "s": "Hacker News (国际极客)"}, {"t": "Apple reveals new AI architecture built around Google Gemini models", "u": "https://news.ycombinator.com/item?id=48450142", "s": "Hacker News (国际极客)"}, {"t": "Launch HN: Intuned (YC S22) – Build and run reliable browser automations as code", "u": "https://news.ycombinator.com/item?id=48445171", "s": "Hacker News (国际极客)"}, {"t": "Games Between Programs: The Ruliology of Competition", "u": "https://news.ycombinator.com/item?id=48419769", "s": "Hacker News (国际极客)"}, {"t": "Doing Something That's Never Been Done Before", "u": "https://news.ycombinator.com/item?id=48413067", "s": "Hacker News (国际极客)"}, {"t": "The Grate Cheese Robbery", "u": "https://news.ycombinator.com/item?id=48433927", "s": "Hacker News (国际极客)"}, {"t": "AI is slowing down", "u": "https://news.ycombinator.com/item?id=48446893", "s": "Hacker News (国际极客)"}, {"t": "Fooling Go's X.509 Certificate Verification", "u": "https://news.ycombinator.com/item?id=48425166", "s": "Hacker News (国际极客)"}, {"t": "Show HN: Mach – A compiled systems language looking for contributions", "u": "https://news.ycombinator.com/item?id=48453666", "s": "Hacker News (国际极客)"}, {"t": "1worldflag: A blue dot on a transparent background", "u": "https://news.ycombinator.com/item?id=48440435", "s": "Hacker News (国际极客)"}, {"t": "OCaml Onboarding: Introduction to the Dune build system", "u": "https://news.ycombinator.com/item?id=48402137", "s": "Hacker News (国际极客)"}, {"t": "Show HN: Command Center, the AI coding env for people who care about quality", "u": "https://news.ycombinator.com/item?id=48453002", "s": "Hacker News (国际极客)"}, {"t": "How much of Thermo Fisher's antibody data has been manipulated?", "u": "https://news.ycombinator.com/item?id=48442075", "s": "Hacker News (国际极客)"}, {"t": "Switzerland wil have a referendum to cap population at 10M", "u": "https://news.ycombinator.com/item?id=48450059", "s": "Hacker News (国际极客)"}, {"t": "Massachusetts bans sale of precise location data in new privacy rights bill", "u": "https://news.ycombinator.com/item?id=48448012", "s": "Hacker News (国际极客)"}, {"t": "Stop the Apple Music app from launching", "u": "https://news.ycombinator.com/item?id=48447935", "s": "Hacker News (国际极客)"}, {"t": "Browse.sh", "u": "https://www.producthunt.com/products/browserbase?utm_campaign=producthunt-api&utm_medium=api-v2&utm_source=Application%3A+newsnow+%28ID%3A+239216%29", "s": "ProductHunt (新产品)"}, {"t": "Honen", "u": "https://www.producthunt.com/products/honen?utm_campaign=producthunt-api&utm_medium=api-v2&utm_source=Application%3A+newsnow+%28ID%3A+239216%29", "s": "ProductHunt (新产品)"}, {"t": "Vaani", "u": "https://www.producthunt.com/products/vaani-2?utm_campaign=producthunt-api&utm_medium=api-v2&utm_source=Application%3A+newsnow+%28ID%3A+239216%29", "s": "ProductHunt (新产品)"}, {"t": "Supaste", "u": "https://www.producthunt.com/products/supaste?utm_campaign=producthunt-api&utm_medium=api-v2&utm_source=Application%3A+newsnow+%28ID%3A+239216%29", "s": "ProductHunt (新产品)"}, {"t": "The Virtual OS Museum", "u": "https://www.producthunt.com/products/the-virtual-os-museum?utm_campaign=producthunt-api&utm_medium=api-v2&utm_source=Application%3A+newsnow+%28ID%3A+239216%29", "s": "ProductHunt (新产品)"}, {"t": "Tamadoggo", "u": "https://www.producthunt.com/products/tamadoggo?utm_campaign=producthunt-api&utm_medium=api-v2&utm_source=Application%3A+newsnow+%28ID%3A+239216%29", "s": "ProductHunt (新产品)"}, {"t": "NTSC-RS", "u": "https://www.producthunt.com/products/ntsc-rs?utm_campaign=producthunt-api&utm_medium=api-v2&utm_source=Application%3A+newsnow+%28ID%3A+239216%29", "s": "ProductHunt (新产品)"}, {"t": "Sigma File Manager", "u": "https://www.producthunt.com/products/sigma-file-manager?utm_campaign=producthunt-api&utm_medium=api-v2&utm_source=Application%3A+newsnow+%28ID%3A+239216%29", "s": "ProductHunt (新产品)"}, {"t": "Claude Artifact Player", "u": "https://www.producthunt.com/products/claude-artifact-player?utm_campaign=producthunt-api&utm_medium=api-v2&utm_source=Application%3A+newsnow+%28ID%3A+239216%29", "s": "ProductHunt (新产品)"}, {"t": "Slashspace AI", "u": "https://www.producthunt.com/products/slashspace-ai?utm_campaign=producthunt-api&utm_medium=api-v2&utm_source=Application%3A+newsnow+%28ID%3A+239216%29", "s": "ProductHunt (新产品)"}, {"t": "Olo", "u": "https://www.producthunt.com/products/olo-1st-ai-style-companion-for-guys?utm_campaign=producthunt-api&utm_medium=api-v2&utm_source=Application%3A+newsnow+%28ID%3A+239216%29", "s": "ProductHunt (新产品)"}, {"t": "The Incident Challenge", "u": "https://www.producthunt.com/products/the-incident-challenge?utm_campaign=producthunt-api&utm_medium=api-v2&utm_source=Application%3A+newsnow+%28ID%3A+239216%29", "s": "ProductHunt (新产品)"}, {"t": "FixtureKit", "u": "https://www.producthunt.com/products/fixturekit?utm_campaign=producthunt-api&utm_medium=api-v2&utm_source=Application%3A+newsnow+%28ID%3A+239216%29", "s": "ProductHunt (新产品)"}, {"t": "Trekme.pro", "u": "https://www.producthunt.com/products/trekme-pro?utm_campaign=producthunt-api&utm_medium=api-v2&utm_source=Application%3A+newsnow+%28ID%3A+239216%29", "s": "ProductHunt (新产品)"}, {"t": "Vox", "u": "https://www.producthunt.com/products/vox-no-cloud-no-account-no-tracking?utm_campaign=producthunt-api&utm_medium=api-v2&utm_source=Application%3A+newsnow+%28ID%3A+239216%29", "s": "ProductHunt (新产品)"}, {"t": "Stepmello", "u": "https://www.producthunt.com/products/stepmello?utm_campaign=producthunt-api&utm_medium=api-v2&utm_source=Application%3A+newsnow+%28ID%3A+239216%29", "s": "ProductHunt (新产品)"}, {"t": "Pitch Planner App", "u": "https://www.producthunt.com/products/pitch-planner-app?utm_campaign=producthunt-api&utm_medium=api-v2&utm_source=Application%3A+newsnow+%28ID%3A+239216%29", "s": "ProductHunt (新产品)"}, {"t": "Kyro", "u": "https://www.producthunt.com/products/kyro-3?utm_campaign=producthunt-api&utm_medium=api-v2&utm_source=Application%3A+newsnow+%28ID%3A+239216%29", "s": "ProductHunt (新产品)"}, {"t": "Financial Data API", "u": "https://www.producthunt.com/products/financial-data-api?utm_campaign=producthunt-api&utm_medium=api-v2&utm_source=Application%3A+newsnow+%28ID%3A+239216%29", "s": "ProductHunt (新产品)"}, {"t": "thita.ai", "u": "https://www.producthunt.com/products/thita-ai?utm_campaign=producthunt-api&utm_medium=api-v2&utm_source=Application%3A+newsnow+%28ID%3A+239216%29", "s": "ProductHunt (新产品)"}, {"t": "苹果WWDC26系统更新信息总结：", "u": "https://www.coolapk.com/feed/72237426", "s": "酷安 (数码)"}, {"t": "好了好了，不出意外小米也疯了！", "u": "https://www.coolapk.com/feed/72226106", "s": "酷安 (数码)"}, {"t": "小米 17T 系列发布：定价 3299 元起 / 首销 2999 元起", "u": "https://www.coolapk.com/feed/72225492", "s": "酷安 (数码)"}, {"t": "看了差不多一个小时的官方发布会，个人总结来看就是如果真的和官方一样画饼的话，那苹果的ai是真的追上国产的平均水平了，甚至在某些方面还有超越。", "u": "https://www.coolapk.com/feed/72237354", "s": "酷安 (数码)"}, {"t": "#酷工作# 我是大学生，我挺好奇酷安老哥大部分都是做什么工作的[受虐滑稽]以前总觉得爱好数码的人都会去干程序员或者硬件工程师之类的工作，我学个纯文科专业显得格格不入[流汗滑稽]", "u": "https://www.coolapk.com/feed/72224136", "s": "酷安 (数码)"}, {"t": "#WWDC26# watchOS 27简直无敌了 一下子砍掉四代 6 7 8 9全部阵亡 #iOS27#", "u": "https://www.coolapk.com/feed/72237568", "s": "酷安 (数码)"}, {"t": "17T和TPro两东西还是没脱离性价比思维做产品，要卖精致感的线下机，又不请明星又不做好外观，宣发思路也还是念参数讲故事，隔壁几家主打拍照的线下机宣发思路和方案都在那里了不学[无语]", "u": "https://www.coolapk.com/feed/72227246", "s": "酷安 (数码)"}, {"t": "已确定！iOS27状态栏图标变了！大家觉得iOS27状态栏图标怎么样？欢迎评论区讨论你的看法。 #WWDC26# #iOS27#", "u": "https://www.coolapk.com/feed/72238289", "s": "酷安 (数码)"}, {"t": "『红米K100大部分参数曝光』", "u": "https://www.coolapk.com/feed/72220445", "s": "酷安 (数码)"}, {"t": "壁纸用几天就腻了怎么破，呜呜呜，把你们好看的都交出来[发怒][发怒][发怒]", "u": "https://www.coolapk.com/feed/72211844", "s": "酷安 (数码)"}, {"t": "欧盟不给AI是啥原因 #iOS27# #WWDC26#", "u": "https://www.coolapk.com/feed/72237397", "s": "酷安 (数码)"}, {"t": "#WWDC26# #watchOS26# #ios26#", "u": "https://www.coolapk.com/feed/72237533", "s": "酷安 (数码)"}, {"t": "苹果WWDC26新系统可升级设备公布", "u": "https://www.coolapk.com/feed/72237577", "s": "酷安 (数码)"}, {"t": "iOS27已经发布beta测试版 升过的兄弟可以交流一下 #iOS27# #iOS26# #iPhone17#", "u": "https://www.coolapk.com/feed/72239333", "s": "酷安 (数码)"}, {"t": "#iOS26# #iOS27# #WWDC26#", "u": "https://www.coolapk.com/feed/72222969", "s": "酷安 (数码)"}, {"t": "iPhone11 还支持 iOS27，牛逼 #WWDC26# #iOS27#", "u": "https://www.coolapk.com/feed/72236759", "s": "酷安 (数码)"}, {"t": "本周看什么 | 最近值得一看的 8 部作品", "u": "https://sspai.com/post/110786", "s": "少数派"}, {"t": "31 位普通人，给一只背包开出了成绩单", "u": "https://sspai.com/post/110666", "s": "少数派"}, {"t": "新玩意 243｜少数派的编辑们最近买了啥？", "u": "https://sspai.com/post/110736", "s": "少数派"}, {"t": "从插件到 AI 辅助：Obsidian 如何成为我的主力工具", "u": "https://sspai.com/post/109850", "s": "少数派"}, {"t": "派评 | 近期值得关注的 App", "u": "https://sspai.com/post/110547", "s": "少数派"}, {"t": "Await：五分钟，把点子变成 iPhone 小组件", "u": "https://sspai.com/post/110106", "s": "少数派"}, {"t": "AI Agent 干中学，「造轮子」让我学会了什么？", "u": "https://sspai.com/post/110370", "s": "少数派"}, {"t": "AI 如何影响你的审美？", "u": "https://sspai.com/post/110172", "s": "少数派"}, {"t": "什么才是「好」的 Android 音频输出？从一台旧日 Xperia 说起", "u": "https://sspai.com/post/110120", "s": "少数派"}, {"t": "为什么没人会喜欢你用 LLM 写出来的东西？", "u": "https://sspai.com/post/110102", "s": "少数派"}, {"t": "本周看什么 | 最近值得一看的 7 部作品", "u": "https://sspai.com/post/110046", "s": "少数派"}, {"t": "浏览器扩展合集：我们为你找到了这 6 款实用、有趣的「新玩意」", "u": "https://sspai.com/post/110044", "s": "少数派"}, {"t": "新玩意 242｜少数派的编辑们最近买了啥？", "u": "https://sspai.com/post/110009", "s": "少数派"}, {"t": "当 AI 成为角色：漫谈我的 SillyTavern 使用经验", "u": "https://sspai.com/post/109869", "s": "少数派"}, {"t": "打破虚拟与现实的边界，这 6 款网页解谜游戏值得一试", "u": "https://sspai.com/post/109743", "s": "少数派"}, {"t": "为什么我觉得好的东西，媒体评测却给了低分？", "u": "https://sspai.com/post/109777", "s": "少数派"}, {"t": "新玩意 241｜少数派的编辑们最近买了啥？", "u": "https://sspai.com/post/109771", "s": "少数派"}, {"t": "capcap：一键搞定截图、标注与图床，免费、开源的 macOS 截图工具", "u": "https://sspai.com/post/109741", "s": "少数派"}, {"t": "你真的需要墨水屏设备吗？", "u": "https://sspai.com/post/109550", "s": "少数派"}, {"t": "App+1 | 有太多香水不知道用哪个？我做了一款能帮你选香水的记录 App", "u": "https://sspai.com/post/109227", "s": "少数派"}, {"t": "万字复盘我家的装修过程，希望可以帮你避避坑", "u": "https://sspai.com/post/109397", "s": "少数派"}, {"t": "五年陪伴依然不舍，DIY 换壳后让罗技 MX Master 3 继续服役", "u": "https://sspai.com/post/109450", "s": "少数派"}, {"t": "新玩意 240｜少数派的编辑们最近买了啥？", "u": "https://sspai.com/post/109474", "s": "少数派"}, {"t": "一日一技｜为什么你应该关闭 iOS 的键盘声音", "u": "https://sspai.com/post/109460", "s": "少数派"}, {"t": "我花费 2 小时 Vibe coding 出的个人作品展示页面，各位大佬看看是什么水平", "u": "https://www.v2ex.com/t/1218922", "s": "V2EX"}, {"t": "iOS 27 加入节假日闹钟，「休息日💤」感觉可以退休了", "u": "https://www.v2ex.com/t/1218921", "s": "V2EX"}, {"t": "顺丰的 AI 笑话", "u": "https://www.v2ex.com/t/1218920", "s": "V2EX"}, {"t": "搞了个能自己写代码进化的 AI 数字员工，聊一下怎么做的", "u": "https://www.v2ex.com/t/1218909", "s": "V2EX"}, {"t": "帮后端好哥哥 问问 glm5.1 版本 ai 设计的数据流，但是做着做着就记不住了，要过一会提醒下", "u": "https://www.v2ex.com/t/1218818", "s": "V2EX"}, {"t": "「网速小软件」共享", "u": "https://www.v2ex.com/t/1218859", "s": "V2EX"}, {"t": "自做小软件共享", "u": "https://www.v2ex.com/t/1218876", "s": "V2EX"}, {"t": "如何结合 AI 实现带货变现", "u": "https://www.v2ex.com/t/1218884", "s": "V2EX"}, {"t": "音频检测工具", "u": "https://www.v2ex.com/t/1218889", "s": "V2EX"}, {"t": "美团的黑钻会员又整幺蛾子了", "u": "https://www.v2ex.com/t/1218905", "s": "V2EX"}, {"t": "家人们，有意思的来了，做了个临时分享小秘密的工具", "u": "https://www.v2ex.com/t/1218904", "s": "V2EX"}, {"t": "给 AI Agent 造了个免费股票数据弹药库 — pip install 装了就能跑", "u": "https://www.v2ex.com/t/1218903", "s": "V2EX"}, {"t": "Ultra-Goal: 解放注意力，一句话让 Agent 跑完超长程任务的 Skill", "u": "https://www.v2ex.com/t/1218896", "s": "V2EX"}, {"t": "可以分析电脑硬件故障的软件（做电脑维修的会很方便）", "u": "https://www.v2ex.com/t/1218891", "s": "V2EX"}, {"t": "即页 v1.3 正式发布：从「能分享」到「好管理」，一次质的飞跃", "u": "https://www.v2ex.com/t/1218885", "s": "V2EX"}, {"t": "做了一个 macOS 小工具：用 Cmd+` 在当前 App 的窗口之间切换", "u": "https://www.v2ex.com/t/1218880", "s": "V2EX"}, {"t": "Agent 酒馆", "u": "https://www.v2ex.com/t/1218878", "s": "V2EX"}, {"t": "分享一个浏览器里的音频/视频转换工具： MP3to.cc", "u": "https://www.v2ex.com/t/1218877", "s": "V2EX"}, {"t": "antigravity IDE 又发神经了", "u": "https://www.v2ex.com/t/1218868", "s": "V2EX"}, {"t": "opencode go 套餐推荐", "u": "https://www.v2ex.com/t/1218864", "s": "V2EX"}, {"t": "关于敏感数据脱敏的一个方案", "u": "https://www.v2ex.com/t/1218856", "s": "V2EX"}, {"t": "几个出海工具 IDEA", "u": "https://www.v2ex.com/t/1218851", "s": "V2EX"}, {"t": "Cloudflare 优选 IP，收到 CF 的 DNS 验证邮件，是我没弄对吗？", "u": "https://www.v2ex.com/t/1218836", "s": "V2EX"}, {"t": "火山引擎 coding plan lite 9.9 pro 49.90", "u": "https://www.v2ex.com/t/1218826", "s": "V2EX"}, {"t": "Show 一下最近写的 BPMN 工作流平台 Kiwi，集成了 AI", "u": "https://www.v2ex.com/t/1218824", "s": "V2EX"}, {"t": "[开源分享] 从 workbuddy 提炼转化的专家团工作流模式。", "u": "https://www.v2ex.com/t/1218821", "s": "V2EX"}, {"t": "DBNova|一个通用的数据库客户端 beta.2 发布", "u": "https://www.v2ex.com/t/1218819", "s": "V2EX"}, {"t": "早期 MacOS 美学视听/游戏引擎 Posara", "u": "https://www.v2ex.com/t/1218813", "s": "V2EX"}, {"t": "写了个 mac 上 cloudfare works 订阅的客户端，用来来还不错，球 star", "u": "https://www.v2ex.com/t/1218811", "s": "V2EX"}, {"t": "做了一个以情绪为起点的数字花束工具 — MoodLetter", "u": "https://www.v2ex.com/t/1218808", "s": "V2EX"}, {"t": "高考", "u": "https://s.weibo.com/weibo?q=%E9%AB%98%E8%80%83&t=31&band_rank=1&Refer=top] [MOBILE:https://s.weibo.com/weibo?q=%E9%AB%98%E8%80%83&t=31&band_rank=1&Refer=top", "s": "微博"}, {"t": "郑钦文止步女王杯首轮", "u": "https://s.weibo.com/weibo?q=%23%E9%83%91%E9%92%A6%E6%96%87%E6%AD%A2%E6%AD%A5%E5%A5%B3%E7%8E%8B%E6%9D%AF%E9%A6%96%E8%BD%AE%23&t=31&band_rank=2&Refer=top] [MOBILE:https://s.weibo.com/weibo?q=%23%E9%83%91%E9%92%A6%E6%96%87%E6%AD%A2%E6%AD%A5%E5%A5%B3%E7%8E%8B%E6%9D%AF%E9%A6%96%E8%BD%AE%23&t=31&band_rank=2&Refer=top", "s": "微博"}, {"t": "平壤各界群众和少年儿童身着节日盛装", "u": "https://s.weibo.com/weibo?q=%23%E5%B9%B3%E5%A3%A4%E5%90%84%E7%95%8C%E7%BE%A4%E4%BC%97%E5%92%8C%E5%B0%91%E5%B9%B4%E5%84%BF%E7%AB%A5%E8%BA%AB%E7%9D%80%E8%8A%82%E6%97%A5%E7%9B%9B%E8%A3%85%23&t=31&band_rank=3&Refer=top] [MOBILE:https://s.weibo.com/weibo?q=%23%E5%B9%B3%E5%A3%A4%E5%90%84%E7%95%8C%E7%BE%A4%E4%BC%97%E5%92%8C%E5%B0%91%E5%B9%B4%E5%84%BF%E7%AB%A5%E8%BA%AB%E7%9D%80%E8%8A%82%E6%97%A5%E7%9B%9B%E8%A3%85%23&t=31&band_rank=3&Refer=top", "s": "微博"}, {"t": "男子留遗书殉情妻子去世原因曝光", "u": "https://s.weibo.com/weibo?q=%23%E7%94%B7%E5%AD%90%E7%95%99%E9%81%97%E4%B9%A6%E6%AE%89%E6%83%85%E5%A6%BB%E5%AD%90%E5%8E%BB%E4%B8%96%E5%8E%9F%E5%9B%A0%E6%9B%9D%E5%85%89%23&t=31&band_rank=4&Refer=top] [MOBILE:https://s.weibo.com/weibo?q=%23%E7%94%B7%E5%AD%90%E7%95%99%E9%81%97%E4%B9%A6%E6%AE%89%E6%83%85%E5%A6%BB%E5%AD%90%E5%8E%BB%E4%B8%96%E5%8E%9F%E5%9B%A0%E6%9B%9D%E5%85%89%23&t=31&band_rank=4&Refer=top", "s": "微博"}, {"t": "唐尚珺高考16次累计获30万补助", "u": "https://s.weibo.com/weibo?q=%23%E5%94%90%E5%B0%9A%E7%8F%BA%E9%AB%98%E8%80%8316%E6%AC%A1%E7%B4%AF%E8%AE%A1%E8%8E%B730%E4%B8%87%E8%A1%A5%E5%8A%A9%23&t=31&band_rank=5&Refer=top] [MOBILE:https://s.weibo.com/weibo?q=%23%E5%94%90%E5%B0%9A%E7%8F%BA%E9%AB%98%E8%80%8316%E6%AC%A1%E7%B4%AF%E8%AE%A1%E8%8E%B730%E4%B8%87%E8%A1%A5%E5%8A%A9%23&t=31&band_rank=5&Refer=top", "s": "微博"}, {"t": "印度为何顶着高温也要限制中国空调", "u": "https://s.weibo.com/weibo?q=%23%E5%8D%B0%E5%BA%A6%E4%B8%BA%E4%BD%95%E9%A1%B6%E7%9D%80%E9%AB%98%E6%B8%A9%E4%B9%9F%E8%A6%81%E9%99%90%E5%88%B6%E4%B8%AD%E5%9B%BD%E7%A9%BA%E8%B0%83%23&t=31&band_rank=6&Refer=top] [MOBILE:https://s.weibo.com/weibo?q=%23%E5%8D%B0%E5%BA%A6%E4%B8%BA%E4%BD%95%E9%A1%B6%E7%9D%80%E9%AB%98%E6%B8%A9%E4%B9%9F%E8%A6%81%E9%99%90%E5%88%B6%E4%B8%AD%E5%9B%BD%E7%A9%BA%E8%B0%83%23&t=31&band_rank=6&Refer=top", "s": "微博"}, {"t": "李小冉乘风下班哭了", "u": "https://s.weibo.com/weibo?q=%23%E6%9D%8E%E5%B0%8F%E5%86%89%E4%B9%98%E9%A3%8E%E4%B8%8B%E7%8F%AD%E5%93%AD%E4%BA%86%23&t=31&band_rank=7&Refer=top] [MOBILE:https://s.weibo.com/weibo?q=%23%E6%9D%8E%E5%B0%8F%E5%86%89%E4%B9%98%E9%A3%8E%E4%B8%8B%E7%8F%AD%E5%93%AD%E4%BA%86%23&t=31&band_rank=7&Refer=top", "s": "微博"}, {"t": "跑男团全员包场白鹿莫离", "u": "https://s.weibo.com/weibo?q=%23%E8%B7%91%E7%94%B7%E5%9B%A2%E5%85%A8%E5%91%98%E5%8C%85%E5%9C%BA%E7%99%BD%E9%B9%BF%E8%8E%AB%E7%A6%BB%23&t=31&band_rank=8&Refer=top] [MOBILE:https://s.weibo.com/weibo?q=%23%E8%B7%91%E7%94%B7%E5%9B%A2%E5%85%A8%E5%91%98%E5%8C%85%E5%9C%BA%E7%99%BD%E9%B9%BF%E8%8E%AB%E7%A6%BB%23&t=31&band_rank=8&Refer=top", "s": "微博"}, {"t": "法国3比1北爱尔兰", "u": "https://s.weibo.com/weibo?q=%E6%B3%95%E5%9B%BD3%E6%AF%941%E5%8C%97%E7%88%B1%E5%B0%94%E5%85%B0&t=31&band_rank=9&Refer=top] [MOBILE:https://s.weibo.com/weibo?q=%E6%B3%95%E5%9B%BD3%E6%AF%941%E5%8C%97%E7%88%B1%E5%B0%94%E5%85%B0&t=31&band_rank=9&Refer=top", "s": "微博"}, {"t": "奥利塞帽子戏法", "u": "https://s.weibo.com/weibo?q=%23%E5%A5%A5%E5%88%A9%E5%A1%9E%E5%B8%BD%E5%AD%90%E6%88%8F%E6%B3%95%23&t=31&band_rank=10&Refer=top] [MOBILE:https://s.weibo.com/weibo?q=%23%E5%A5%A5%E5%88%A9%E5%A1%9E%E5%B8%BD%E5%AD%90%E6%88%8F%E6%B3%95%23&t=31&band_rank=10&Refer=top", "s": "微博"}, {"t": "艾米低调最后进考场", "u": "https://s.weibo.com/weibo?q=%E8%89%BE%E7%B1%B3%E4%BD%8E%E8%B0%83%E6%9C%80%E5%90%8E%E8%BF%9B%E8%80%83%E5%9C%BA&t=31&band_rank=11&Refer=top] [MOBILE:https://s.weibo.com/weibo?q=%E8%89%BE%E7%B1%B3%E4%BD%8E%E8%B0%83%E6%9C%80%E5%90%8E%E8%BF%9B%E8%80%83%E5%9C%BA&t=31&band_rank=11&Refer=top", "s": "微博"}, {"t": "金饰克价下跌400元", "u": "https://s.weibo.com/weibo?q=%23%E9%87%91%E9%A5%B0%E5%85%8B%E4%BB%B7%E4%B8%8B%E8%B7%8C400%E5%85%83%23&t=31&band_rank=12&Refer=top] [MOBILE:https://s.weibo.com/weibo?q=%23%E9%87%91%E9%A5%B0%E5%85%8B%E4%BB%B7%E4%B8%8B%E8%B7%8C400%E5%85%83%23&t=31&band_rank=12&Refer=top", "s": "微博"}, {"t": "全世界倒数第一体面的运动", "u": "https://s.weibo.com/weibo?q=%E5%85%A8%E4%B8%96%E7%95%8C%E5%80%92%E6%95%B0%E7%AC%AC%E4%B8%80%E4%BD%93%E9%9D%A2%E7%9A%84%E8%BF%90%E5%8A%A8&t=31&band_rank=13&Refer=top] [MOBILE:https://s.weibo.com/weibo?q=%E5%85%A8%E4%B8%96%E7%95%8C%E5%80%92%E6%95%B0%E7%AC%AC%E4%B8%80%E4%BD%93%E9%9D%A2%E7%9A%84%E8%BF%90%E5%8A%A8&t=31&band_rank=13&Refer=top", "s": "微博"}, {"t": "韩剧迎来了它的四大战神", "u": "https://s.weibo.com/weibo?q=%23%E9%9F%A9%E5%89%A7%E8%BF%8E%E6%9D%A5%E4%BA%86%E5%AE%83%E7%9A%84%E5%9B%9B%E5%A4%A7%E6%88%98%E7%A5%9E%23&t=31&band_rank=14&Refer=top] [MOBILE:https://s.weibo.com/weibo?q=%23%E9%9F%A9%E5%89%A7%E8%BF%8E%E6%9D%A5%E4%BA%86%E5%AE%83%E7%9A%84%E5%9B%9B%E5%A4%A7%E6%88%98%E7%A5%9E%23&t=31&band_rank=14&Refer=top", "s": "微博"}, {"t": "曝白鹿重组团队", "u": "https://s.weibo.com/weibo?q=%23%E6%9B%9D%E7%99%BD%E9%B9%BF%E9%87%8D%E7%BB%84%E5%9B%A2%E9%98%9F%23&t=31&band_rank=15&Refer=top] [MOBILE:https://s.weibo.com/weibo?q=%23%E6%9B%9D%E7%99%BD%E9%B9%BF%E9%87%8D%E7%BB%84%E5%9B%A2%E9%98%9F%23&t=31&band_rank=15&Refer=top", "s": "微博"}, {"t": "郑钦文怎么了", "u": "https://s.weibo.com/weibo?q=%23%E9%83%91%E9%92%A6%E6%96%87%E6%80%8E%E4%B9%88%E4%BA%86%23&t=31&band_rank=16&Refer=top] [MOBILE:https://s.weibo.com/weibo?q=%23%E9%83%91%E9%92%A6%E6%96%87%E6%80%8E%E4%B9%88%E4%BA%86%23&t=31&band_rank=16&Refer=top", "s": "微博"}, {"t": "人在什么状态下学习效率最高", "u": "https://s.weibo.com/weibo?q=%E4%BA%BA%E5%9C%A8%E4%BB%80%E4%B9%88%E7%8A%B6%E6%80%81%E4%B8%8B%E5%AD%A6%E4%B9%A0%E6%95%88%E7%8E%87%E6%9C%80%E9%AB%98&t=31&band_rank=17&Refer=top] [MOBILE:https://s.weibo.com/weibo?q=%E4%BA%BA%E5%9C%A8%E4%BB%80%E4%B9%88%E7%8A%B6%E6%80%81%E4%B8%8B%E5%AD%A6%E4%B9%A0%E6%95%88%E7%8E%87%E6%9C%80%E9%AB%98&t=31&band_rank=17&Refer=top", "s": "微博"}, {"t": "特朗普观战NBA总决赛", "u": "https://s.weibo.com/weibo?q=%E7%89%B9%E6%9C%97%E6%99%AE%E8%A7%82%E6%88%98NBA%E6%80%BB%E5%86%B3%E8%B5%9B&t=31&band_rank=18&Refer=top] [MOBILE:https://s.weibo.com/weibo?q=%E7%89%B9%E6%9C%97%E6%99%AE%E8%A7%82%E6%88%98NBA%E6%80%BB%E5%86%B3%E8%B5%9B&t=31&band_rank=18&Refer=top", "s": "微博"}, {"t": "马刺vs尼克斯", "u": "https://s.weibo.com/weibo?q=%E9%A9%AC%E5%88%BAvs%E5%B0%BC%E5%85%8B%E6%96%AF&t=31&band_rank=19&Refer=top] [MOBILE:https://s.weibo.com/weibo?q=%E9%A9%AC%E5%88%BAvs%E5%B0%BC%E5%85%8B%E6%96%AF&t=31&band_rank=19&Refer=top", "s": "微博"}, {"t": "iOS27升级汇总", "u": "https://s.weibo.com/weibo?q=%23iOS27%E5%8D%87%E7%BA%A7%E6%B1%87%E6%80%BB%23&t=31&band_rank=20&Refer=top] [MOBILE:https://s.weibo.com/weibo?q=%23iOS27%E5%8D%87%E7%BA%A7%E6%B1%87%E6%80%BB%23&t=31&band_rank=20&Refer=top", "s": "微博"}, {"t": "虞书欣身材状态", "u": "https://s.weibo.com/weibo?q=%23%E8%99%9E%E4%B9%A6%E6%AC%A3%E8%BA%AB%E6%9D%90%E7%8A%B6%E6%80%81%23&t=31&band_rank=21&Refer=top] [MOBILE:https://s.weibo.com/weibo?q=%23%E8%99%9E%E4%B9%A6%E6%AC%A3%E8%BA%AB%E6%9D%90%E7%8A%B6%E6%80%81%23&t=31&band_rank=21&Refer=top", "s": "微博"}, {"t": "为什么面试要填家庭成员信息", "u": "https://s.weibo.com/weibo?q=%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9D%A2%E8%AF%95%E8%A6%81%E5%A1%AB%E5%AE%B6%E5%BA%AD%E6%88%90%E5%91%98%E4%BF%A1%E6%81%AF&t=31&band_rank=22&Refer=top] [MOBILE:https://s.weibo.com/weibo?q=%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9D%A2%E8%AF%95%E8%A6%81%E5%A1%AB%E5%AE%B6%E5%BA%AD%E6%88%90%E5%91%98%E4%BF%A1%E6%81%AF&t=31&band_rank=22&Refer=top", "s": "微博"}, {"t": "张月方停止浪姐选歌", "u": "https://s.weibo.com/weibo?q=%23%E5%BC%A0%E6%9C%88%E6%96%B9%E5%81%9C%E6%AD%A2%E6%B5%AA%E5%A7%90%E9%80%89%E6%AD%8C%23&t=31&band_rank=23&Refer=top] [MOBILE:https://s.weibo.com/weibo?q=%23%E5%BC%A0%E6%9C%88%E6%96%B9%E5%81%9C%E6%AD%A2%E6%B5%AA%E5%A7%90%E9%80%89%E6%AD%8C%23&t=31&band_rank=23&Refer=top", "s": "微博"}, {"t": "膳魔师紧急召回百万件产品", "u": "https://s.weibo.com/weibo?q=%23%E8%86%B3%E9%AD%94%E5%B8%88%E7%B4%A7%E6%80%A5%E5%8F%AC%E5%9B%9E%E7%99%BE%E4%B8%87%E4%BB%B6%E4%BA%A7%E5%93%81%23&t=31&band_rank=24&Refer=top] [MOBILE:https://s.weibo.com/weibo?q=%23%E8%86%B3%E9%AD%94%E5%B8%88%E7%B4%A7%E6%80%A5%E5%8F%AC%E5%9B%9E%E7%99%BE%E4%B8%87%E4%BB%B6%E4%BA%A7%E5%93%81%23&t=31&band_rank=24&Refer=top", "s": "微博"}, {"t": "赵梦澈宣布离开辛选", "u": "https://s.weibo.com/weibo?q=%E8%B5%B5%E6%A2%A6%E6%BE%88%E5%AE%A3%E5%B8%83%E7%A6%BB%E5%BC%80%E8%BE%9B%E9%80%89&t=31&band_rank=25&Refer=top] [MOBILE:https://s.weibo.com/weibo?q=%E8%B5%B5%E6%A2%A6%E6%BE%88%E5%AE%A3%E5%B8%83%E7%A6%BB%E5%BC%80%E8%BE%9B%E9%80%89&t=31&band_rank=25&Refer=top", "s": "微博"}, {"t": "虫子半夜吃饭吧唧嘴被男子当场处决", "u": "https://s.weibo.com/weibo?q=%23%E8%99%AB%E5%AD%90%E5%8D%8A%E5%A4%9C%E5%90%83%E9%A5%AD%E5%90%A7%E5%94%A7%E5%98%B4%E8%A2%AB%E7%94%B7%E5%AD%90%E5%BD%93%E5%9C%BA%E5%A4%84%E5%86%B3%23&t=31&band_rank=26&Refer=top] [MOBILE:https://s.weibo.com/weibo?q=%23%E8%99%AB%E5%AD%90%E5%8D%8A%E5%A4%9C%E5%90%83%E9%A5%AD%E5%90%A7%E5%94%A7%E5%98%B4%E8%A2%AB%E7%94%B7%E5%AD%90%E5%BD%93%E5%9C%BA%E5%A4%84%E5%86%B3%23&t=31&band_rank=26&Refer=top", "s": "微博"}, {"t": "CPB认领了刘诗诗", "u": "https://s.weibo.com/weibo?q=%23CPB%E8%AE%A4%E9%A2%86%E4%BA%86%E5%88%98%E8%AF%97%E8%AF%97%23&t=31&band_rank=27&Refer=top] [MOBILE:https://s.weibo.com/weibo?q=%23CPB%E8%AE%A4%E9%A2%86%E4%BA%86%E5%88%98%E8%AF%97%E8%AF%97%23&t=31&band_rank=27&Refer=top", "s": "微博"}, {"t": "姚译添不是跑男初代导演", "u": "https://s.weibo.com/weibo?q=%23%E5%A7%9A%E8%AF%91%E6%B7%BB%E4%B8%8D%E6%98%AF%E8%B7%91%E7%94%B7%E5%88%9D%E4%BB%A3%E5%AF%BC%E6%BC%94%23&t=31&band_rank=28&Refer=top] [MOBILE:https://s.weibo.com/weibo?q=%23%E5%A7%9A%E8%AF%91%E6%B7%BB%E4%B8%8D%E6%98%AF%E8%B7%91%E7%94%B7%E5%88%9D%E4%BB%A3%E5%AF%BC%E6%BC%94%23&t=31&band_rank=28&Refer=top", "s": "微博"}, {"t": "美股", "u": "https://s.weibo.com/weibo?q=%E7%BE%8E%E8%82%A1&t=31&band_rank=29&Refer=top] [MOBILE:https://s.weibo.com/weibo?q=%E7%BE%8E%E8%82%A1&t=31&band_rank=29&Refer=top", "s": "微博"}, {"t": "伊朗打击以色列两处军事基地", "u": "https://s.weibo.com/weibo?q=%23%E4%BC%8A%E6%9C%97%E6%89%93%E5%87%BB%E4%BB%A5%E8%89%B2%E5%88%97%E4%B8%A4%E5%A4%84%E5%86%9B%E4%BA%8B%E5%9F%BA%E5%9C%B0%23&t=31&band_rank=30&Refer=top] [MOBILE:https://s.weibo.com/weibo?q=%23%E4%BC%8A%E6%9C%97%E6%89%93%E5%87%BB%E4%BB%A5%E8%89%B2%E5%88%97%E4%B8%A4%E5%A4%84%E5%86%9B%E4%BA%8B%E5%9F%BA%E5%9C%B0%23&t=31&band_rank=30&Refer=top", "s": "微博"}, {"t": "NBA总决赛G3尼克斯vs马刺", "u": "https://www.douyin.com/hot/2527995", "s": "抖音"}, {"t": "当我的拼豆手环是专属应援", "u": "https://www.douyin.com/hot/2526987", "s": "抖音"}, {"t": "从这些瞬间感受中朝友谊", "u": "https://www.douyin.com/hot/2527792", "s": "抖音"}, {"t": "首个坐轮椅上清华的人现在怎么样了", "u": "https://www.douyin.com/hot/2527283", "s": "抖音"}, {"t": "多地公布2026年高考查分时间", "u": "https://www.douyin.com/hot/2526224", "s": "抖音"}, {"t": "当咸甜大战遇到水果冰粽", "u": "https://www.douyin.com/hot/2527142", "s": "抖音"}, {"t": "官方辟谣“人造大米有毒”", "u": "https://www.douyin.com/hot/2527859", "s": "抖音"}, {"t": "看我用早茶拿捏哈兰德", "u": "https://www.douyin.com/hot/2527565", "s": "抖音"}, {"t": "想要问问你敢不敢转场挑战", "u": "https://www.douyin.com/hot/2526945", "s": "抖音"}, {"t": "哇咔哇咔杀回来了", "u": "https://www.douyin.com/hot/2527231", "s": "抖音"}, {"t": "伊朗宣布停止对以色列军事行动", "u": "https://www.douyin.com/hot/2527773", "s": "抖音"}, {"t": "高考结束后的出题老师", "u": "https://www.douyin.com/hot/2527181", "s": "抖音"}, {"t": "前奏太好听于是想和你交换照片", "u": "https://www.douyin.com/hot/2527366", "s": "抖音"}, {"t": "奔跑吧因安阳特辑用邯郸画面致歉", "u": "https://www.douyin.com/hot/2527282", "s": "抖音"}, {"t": "高考英语", "u": "https://www.douyin.com/hot/2527232", "s": "抖音"}, {"t": "我曾踏平了孤川 西风走马", "u": "https://www.douyin.com/hot/2527657", "s": "抖音"}, {"t": "谢苗谈功夫演员断层", "u": "https://www.douyin.com/hot/2527654", "s": "抖音"}, {"t": "为什么家长不能接受孩子是普通人", "u": "https://www.douyin.com/hot/2527559", "s": "抖音"}, {"t": "青春是本写不完的旧书", "u": "https://www.douyin.com/hot/2527254", "s": "抖音"}, {"t": "胜宏科技董事长“电梯门”事件", "u": "https://www.douyin.com/hot/2527170", "s": "抖音"}, {"t": "高考英语作文难度高吗", "u": "https://www.douyin.com/hot/2527939", "s": "抖音"}, {"t": "高考后遗症", "u": "https://www.douyin.com/hot/2527730", "s": "抖音"}, {"t": "叹不尽相思苦忆华年", "u": "https://www.douyin.com/hot/2527360", "s": "抖音"}, {"t": "跳支舞为高考生加油", "u": "https://www.douyin.com/hot/2527453", "s": "抖音"}, {"t": "曾沛慈断层第一", "u": "https://www.douyin.com/hot/2526867", "s": "抖音"}, {"t": "胡枫演唱会刘德华深情演唱忘情水", "u": "https://www.douyin.com/hot/2526801", "s": "抖音"}, {"t": "历史二卷 盲人摸象", "u": "https://www.douyin.com/hot/2527227", "s": "抖音"}, {"t": "全东北都来接少夫人回家了", "u": "https://www.douyin.com/hot/2527160", "s": "抖音"}, {"t": "哈兰德想来重庆吃轻轨", "u": "https://www.douyin.com/hot/2527104", "s": "抖音"}, {"t": "小火人联动童年顶流", "u": "https://www.douyin.com/hot/2527003", "s": "抖音"}, {"t": "Siri大重做", "u": "https://search.bilibili.com/all?keyword=Siri%E5%A4%A7%E9%87%8D%E5%81%9A", "s": "B站热搜"}, {"t": "奥利塞帽子戏法", "u": "https://search.bilibili.com/all?keyword=%E5%A5%A5%E5%88%A9%E5%A1%9E%E5%B8%BD%E5%AD%90%E6%88%8F%E6%B3%95", "s": "B站热搜"}, {"t": "高考地理速通", "u": "https://search.bilibili.com/all?keyword=%E9%AB%98%E8%80%83%E5%9C%B0%E7%90%86%E9%80%9F%E9%80%9A", "s": "B站热搜"}, {"t": "天禄将迎生死战", "u": "https://search.bilibili.com/all?keyword=%E5%A4%A9%E7%A6%84%E5%B0%86%E8%BF%8E%E7%94%9F%E6%AD%BB%E6%88%98", "s": "B站热搜"}, {"t": "7分钟看完WWDC2026", "u": "https://search.bilibili.com/all?keyword=7%E5%88%86%E9%92%9F%E7%9C%8B%E5%AE%8CWWDC2026", "s": "B站热搜"}, {"t": "iOS27 节假日闹钟上线", "u": "https://search.bilibili.com/all?keyword=iOS27%20%E8%8A%82%E5%81%87%E6%97%A5%E9%97%B9%E9%92%9F%E4%B8%8A%E7%BA%BF", "s": "B站热搜"}, {"t": "速评LPL第二赛段淘汰赛", "u": "https://search.bilibili.com/all?keyword=%E9%80%9F%E8%AF%84LPL%E7%AC%AC%E4%BA%8C%E8%B5%9B%E6%AE%B5%E6%B7%98%E6%B1%B0%E8%B5%9B", "s": "B站热搜"}, {"t": "被夸爆的搁浅舞台来了", "u": "https://search.bilibili.com/all?keyword=%E8%A2%AB%E5%A4%B8%E7%88%86%E7%9A%84%E6%90%81%E6%B5%85%E8%88%9E%E5%8F%B0%E6%9D%A5%E4%BA%86", "s": "B站热搜"}, {"t": "管泽元对线世界杯主裁马宁", "u": "https://search.bilibili.com/all?keyword=%E7%AE%A1%E6%B3%BD%E5%85%83%E5%AF%B9%E7%BA%BF%E4%B8%96%E7%95%8C%E6%9D%AF%E4%B8%BB%E8%A3%81%E9%A9%AC%E5%AE%81", "s": "B站热搜"}, {"t": "这款足球游戏让我重回童年", "u": "https://search.bilibili.com/all?keyword=%E8%BF%99%E6%AC%BE%E8%B6%B3%E7%90%83%E6%B8%B8%E6%88%8F%E8%AE%A9%E6%88%91%E9%87%8D%E5%9B%9E%E7%AB%A5%E5%B9%B4", "s": "B站热搜"}, {"t": "如何评价2026高考历史", "u": "https://search.bilibili.com/all?keyword=%E5%A6%82%E4%BD%95%E8%AF%84%E4%BB%B72026%E9%AB%98%E8%80%83%E5%8E%86%E5%8F%B2", "s": "B站热搜"}, {"t": "韩剧铁拳教育剧情有多爽", "u": "https://search.bilibili.com/all?keyword=%E9%9F%A9%E5%89%A7%E9%93%81%E6%8B%B3%E6%95%99%E8%82%B2%E5%89%A7%E6%83%85%E6%9C%89%E5%A4%9A%E7%88%BD", "s": "B站热搜"}, {"t": "锐评2026高考数学", "u": "https://search.bilibili.com/all?keyword=%E9%94%90%E8%AF%842026%E9%AB%98%E8%80%83%E6%95%B0%E5%AD%A6", "s": "B站热搜"}, {"t": "为何要修建三峡新通道", "u": "https://search.bilibili.com/all?keyword=%E4%B8%BA%E4%BD%95%E8%A6%81%E4%BF%AE%E5%BB%BA%E4%B8%89%E5%B3%A1%E6%96%B0%E9%80%9A%E9%81%93", "s": "B站热搜"}, {"t": "胡塞武装称向以色列发射导弹", "u": "https://search.bilibili.com/all?keyword=%E8%83%A1%E5%A1%9E%E6%AD%A6%E8%A3%85%E7%A7%B0%E5%90%91%E4%BB%A5%E8%89%B2%E5%88%97%E5%8F%91%E5%B0%84%E5%AF%BC%E5%BC%B9", "s": "B站热搜"}, {"t": "锐评浪姐四公团内合作秀", "u": "https://search.bilibili.com/all?keyword=%E9%94%90%E8%AF%84%E6%B5%AA%E5%A7%90%E5%9B%9B%E5%85%AC%E5%9B%A2%E5%86%85%E5%90%88%E4%BD%9C%E7%A7%80", "s": "B站热搜"}, {"t": "如何评价2026高考物理", "u": "https://search.bilibili.com/all?keyword=%E5%A6%82%E4%BD%95%E8%AF%84%E4%BB%B72026%E9%AB%98%E8%80%83%E7%89%A9%E7%90%86", "s": "B站热搜"}, {"t": "鲁豫张泉灵聊再见爱人", "u": "https://search.bilibili.com/all?keyword=%E9%B2%81%E8%B1%AB%E5%BC%A0%E6%B3%89%E7%81%B5%E8%81%8A%E5%86%8D%E8%A7%81%E7%88%B1%E4%BA%BA", "s": "B站热搜"}, {"t": "如何评价2026高考英语", "u": "https://search.bilibili.com/all?keyword=%E5%A6%82%E4%BD%95%E8%AF%84%E4%BB%B72026%E9%AB%98%E8%80%83%E8%8B%B1%E8%AF%AD", "s": "B站热搜"}, {"t": "当名人参加高考会发生什么", "u": "https://search.bilibili.com/all?keyword=%E5%BD%93%E5%90%8D%E4%BA%BA%E5%8F%82%E5%8A%A0%E9%AB%98%E8%80%83%E4%BC%9A%E5%8F%91%E7%94%9F%E4%BB%80%E4%B9%88", "s": "B站热搜"}, {"t": "跑男李晨状态引讨论", "u": "https://search.bilibili.com/all?keyword=%E8%B7%91%E7%94%B7%E6%9D%8E%E6%99%A8%E7%8A%B6%E6%80%81%E5%BC%95%E8%AE%A8%E8%AE%BA", "s": "B站热搜"}, {"t": "太空电站关键技术取得突破", "u": "https://search.bilibili.com/all?keyword=%E5%A4%AA%E7%A9%BA%E7%94%B5%E7%AB%99%E5%85%B3%E9%94%AE%E6%8A%80%E6%9C%AF%E5%8F%96%E5%BE%97%E7%AA%81%E7%A0%B4", "s": "B站热搜"}, {"t": "网飞新剧铁拳教育讲了什么", "u": "https://search.bilibili.com/all?keyword=%E7%BD%91%E9%A3%9E%E6%96%B0%E5%89%A7%E9%93%81%E6%8B%B3%E6%95%99%E8%82%B2%E8%AE%B2%E4%BA%86%E4%BB%80%E4%B9%88", "s": "B站热搜"}, {"t": "LEV战胜NRG", "u": "https://search.bilibili.com/all?keyword=LEV%E6%88%98%E8%83%9CNRG", "s": "B站热搜"}, {"t": "综艺嘉宾与观众观感反差", "u": "https://search.bilibili.com/all?keyword=%E7%BB%BC%E8%89%BA%E5%98%89%E5%AE%BE%E4%B8%8E%E8%A7%82%E4%BC%97%E8%A7%82%E6%84%9F%E5%8F%8D%E5%B7%AE", "s": "B站热搜"}, {"t": "美加墨 我的家乡", "u": "https://search.bilibili.com/all?keyword=%E7%BE%8E%E5%8A%A0%E5%A2%A8%20%E6%88%91%E7%9A%84%E5%AE%B6%E4%B9%A1", "s": "B站热搜"}, {"t": "中国车手的纽北Vlog", "u": "https://search.bilibili.com/all?keyword=%E4%B8%AD%E5%9B%BD%E8%BD%A6%E6%89%8B%E7%9A%84%E7%BA%BD%E5%8C%97Vlog", "s": "B站热搜"}, {"t": "盘点世界杯十大热门球队", "u": "https://search.bilibili.com/all?keyword=%E7%9B%98%E7%82%B9%E4%B8%96%E7%95%8C%E6%9D%AF%E5%8D%81%E5%A4%A7%E7%83%AD%E9%97%A8%E7%90%83%E9%98%9F", "s": "B站热搜"}, {"t": "高考地理考前急救", "u": "https://search.bilibili.com/all?keyword=%E9%AB%98%E8%80%83%E5%9C%B0%E7%90%86%E8%80%83%E5%89%8D%E6%80%A5%E6%95%91", "s": "B站热搜"}, {"t": "考生睡过头交警卡点送进考场", "u": "https://search.bilibili.com/all?keyword=%E8%80%83%E7%94%9F%E7%9D%A1%E8%BF%87%E5%A4%B4%E4%BA%A4%E8%AD%A6%E5%8D%A1%E7%82%B9%E9%80%81%E8%BF%9B%E8%80%83%E5%9C%BA", "s": "B站热搜"}, {"t": "如何评价钉钉副总裁发表长文《置身钉外》，宣布离职？", "u": "https://www.zhihu.com/question/2047442402122495550", "s": "知乎"}, {"t": "如何评价网红曾医生呼吁「不要评价同行的手术」？如果你发现病人在外院的手术有问题，你会不会实话实说？", "u": "https://www.zhihu.com/question/1965131125862175371", "s": "知乎"}, {"t": "欧美人真的很在乎隐私吗？", "u": "https://www.zhihu.com/question/655381910", "s": "知乎"}, {"t": "网友调侃 Gemini 为北美大豆包，称其为最蠢 AI，为什么会被诟病难用？你的使用感受如何？", "u": "https://www.zhihu.com/question/2047324900080051711", "s": "知乎"}, {"t": "住房公积金管理条例修订征求意见，新增装修、物业费等用途，并允许灵活就业人员自愿缴存，如何解读？", "u": "https://www.zhihu.com/question/2046903500739700675", "s": "知乎"}, {"t": "伊朗时隔两个月再袭以色列，特朗普称「希望以色列不要还击」，局势将如何发展？美伊谈判是否会受影响？", "u": "https://www.zhihu.com/question/2047287128892224880", "s": "知乎"}, {"t": "如何看待乌贼、肘子、天下霸唱、猫腻等网络作家发起的反抄袭倡议书? 网文的抄袭到底该如何整治？", "u": "https://www.zhihu.com/question/2047333025197904792", "s": "知乎"}, {"t": "尼安德特人是一种怎样的存在？", "u": "https://www.zhihu.com/question/439574330", "s": "知乎"}, {"t": "Apple Intelligence 的缺席为什么没有影响到 iPhone 在中国大陆的销量？", "u": "https://www.zhihu.com/question/2047276644910552070", "s": "知乎"}, {"t": "人民币兑所有货币汇率都在上涨，出口也大幅增长，具体原因是什么？", "u": "https://www.zhihu.com/question/2046773452716217677", "s": "知乎"}, {"t": "3300 亿市值胜宏科技董事长被曝电梯亲密视频，公司称与生产经营无关，如何评价？会带来哪些影响？", "u": "https://www.zhihu.com/question/2047261881392422944", "s": "知乎"}, {"t": "为什么潮汕人过去要冒着生命危险下南洋？是为了发财还是有别的原因？", "u": "https://www.zhihu.com/question/2043023589561952045", "s": "知乎"}, {"t": "怎么评价意大利男足错过三届世界杯？", "u": "https://www.zhihu.com/question/2022742577443553544", "s": "知乎"}, {"t": "四川的简称为什么不用「蜀」？", "u": "https://www.zhihu.com/question/2046216394774258497", "s": "知乎"}, {"t": "吃的方式能否反映一个人的教养、内涵？", "u": "https://www.zhihu.com/question/38642177", "s": "知乎"}, {"t": "为什么感觉今年高考氛围淡淡的，往年提前半个月互联网就预热了，今年似乎大家都不太关注了，这是怎么回事？", "u": "https://www.zhihu.com/question/2046272383623881620", "s": "知乎"}, {"t": "是大部分动物都喜欢被摸头吗？", "u": "https://www.zhihu.com/question/442523187", "s": "知乎"}, {"t": "贾府后面为何越来越入不敷出？", "u": "https://www.zhihu.com/question/12773515690", "s": "知乎"}, {"t": "高层住宅未来是不是垃圾资产？", "u": "https://www.zhihu.com/question/1970866161697690581", "s": "知乎"}, {"t": "金价跌回年初起点，抹去全年涨幅，若美联储加息金价会不会跌破 4000 美元？ 此前多家投行唱多，如何解读？", "u": "https://www.zhihu.com/question/2046542725336584487", "s": "知乎"}, {"t": "街上还有08年高考的老哥吗？还记得这道化学题吗？", "u": "https://bbs.hupu.com/639789334.html] [MOBILE:https://bbs.hupu.com/639789334.html", "s": "虎扑"}, {"t": "抛开身体素质不说，为什么中国男篮投篮技术也不如 NBA？", "u": "https://bbs.hupu.com/639772494.html] [MOBILE:https://bbs.hupu.com/639772494.html", "s": "虎扑"}, {"t": "现在的房子要不要割肉离场？亏了大概50%以上", "u": "https://bbs.hupu.com/639788768.html] [MOBILE:https://bbs.hupu.com/639788768.html", "s": "虎扑"}, {"t": "西安麻辣烫女孩发视频回应了", "u": "https://bbs.hupu.com/639778088.html] [MOBILE:https://bbs.hupu.com/639778088.html", "s": "虎扑"}, {"t": "家人们，有碰到年纪还不大心梗突然离世的吗", "u": "https://bbs.hupu.com/639771017.html] [MOBILE:https://bbs.hupu.com/639771017.html", "s": "虎扑"}, {"t": "熟客是气质女白领，做服务时全程内心挣扎，理智与冲动反复横跳，太磨人了", "u": "https://bbs.hupu.com/639799505.html] [MOBILE:https://bbs.hupu.com/639799505.html", "s": "虎扑"}, {"t": "说一个你虽然退游了，但仍十分怀念并引以为傲的游戏", "u": "https://bbs.hupu.com/639790269.html] [MOBILE:https://bbs.hupu.com/639790269.html", "s": "虎扑"}, {"t": "不说出年份，一人一句话描述你是哪年高考的", "u": "https://bbs.hupu.com/639771221.html] [MOBILE:https://bbs.hupu.com/639771221.html", "s": "虎扑"}, {"t": "饭后路边散散步", "u": "https://bbs.hupu.com/639766343.html] [MOBILE:https://bbs.hupu.com/639766343.html", "s": "虎扑"}, {"t": "市政府秘书长，去下面县里担任县委书记，这是平调重用吗？", "u": "https://bbs.hupu.com/639790124.html] [MOBILE:https://bbs.hupu.com/639790124.html", "s": "虎扑"}, {"t": "冷知识：伊拉克的电价只有中国的1/5，非常便宜", "u": "https://bbs.hupu.com/639795255.html] [MOBILE:https://bbs.hupu.com/639795255.html", "s": "虎扑"}, {"t": "到底是什么人在信这种博主？", "u": "https://bbs.hupu.com/639790241.html] [MOBILE:https://bbs.hupu.com/639790241.html", "s": "虎扑"}, {"t": "真实经历 | 38W+磕头后续来了.........", "u": "https://bbs.hupu.com/639757307.html] [MOBILE:https://bbs.hupu.com/639757307.html", "s": "虎扑"}, {"t": "贵港码头女子溺亡 男子在旁边笑 男女对立又被挑起来了", "u": "https://bbs.hupu.com/639776294.html] [MOBILE:https://bbs.hupu.com/639776294.html", "s": "虎扑"}, {"t": "我以为手机里有准考证照片就行了……", "u": "https://bbs.hupu.com/639800525.html] [MOBILE:https://bbs.hupu.com/639800525.html", "s": "虎扑"}, {"t": "第一次面基经历，一言难尽", "u": "https://bbs.hupu.com/639796911.html] [MOBILE:https://bbs.hupu.com/639796911.html", "s": "虎扑"}, {"t": "59岁梁实第三十次高考", "u": "https://bbs.hupu.com/639772733.html] [MOBILE:https://bbs.hupu.com/639772733.html", "s": "虎扑"}, {"t": "如果要给勒布朗·詹姆斯一个完全中肯的评价，你会怎么说？", "u": "https://bbs.hupu.com/639801480.html] [MOBILE:https://bbs.hupu.com/639801480.html", "s": "虎扑"}, {"t": "想跑外卖的，先听听劝", "u": "https://bbs.hupu.com/639762607.html] [MOBILE:https://bbs.hupu.com/639762607.html", "s": "虎扑"}, {"t": "真实经历 | 38W+磕头。。。大结局", "u": "https://bbs.hupu.com/639773521.html] [MOBILE:https://bbs.hupu.com/639773521.html", "s": "虎扑"}, {"t": "吓到脚软!高考生被架进考场", "u": "https://tieba.baidu.com/hottopic/browse/hottopic?topic_id=28354976&amp;topic_name=%E5%90%93%E5%88%B0%E8%84%9A%E8%BD%AF%21%E9%AB%98%E8%80%83%E7%94%9F%E8%A2%AB%E6%9E%B6%E8%BF%9B%E8%80%83%E5%9C%BA", "s": "贴吧"}, {"t": "黑人考生谈作文,语文不输本地人", "u": "https://tieba.baidu.com/hottopic/browse/hottopic?topic_id=28354983&amp;topic_name=%E9%BB%91%E4%BA%BA%E8%80%83%E7%94%9F%E8%B0%88%E4%BD%9C%E6%96%87%2C%E8%AF%AD%E6%96%87%E4%B8%8D%E8%BE%93%E6%9C%AC%E5%9C%B0%E4%BA%BA", "s": "贴吧"}, {"t": "Bin虐泉AL,一打三双杀晋级", "u": "https://tieba.baidu.com/hottopic/browse/hottopic?topic_id=28354986&amp;topic_name=Bin%E8%99%90%E6%B3%89AL%2C%E4%B8%80%E6%89%93%E4%B8%89%E5%8F%8C%E6%9D%80%E6%99%8B%E7%BA%A7", "s": "贴吧"}, {"t": "数学估满分,高考自信姐来袭", "u": "https://tieba.baidu.com/hottopic/browse/hottopic?topic_id=28354988&amp;topic_name=%E6%95%B0%E5%AD%A6%E4%BC%B0%E6%BB%A1%E5%88%86%2C%E9%AB%98%E8%80%83%E8%87%AA%E4%BF%A1%E5%A7%90%E6%9D%A5%E8%A2%AD", "s": "贴吧"}, {"t": "印度博主蹭吃白嫖被拒", "u": "https://tieba.baidu.com/hottopic/browse/hottopic?topic_id=28354970&amp;topic_name=%E5%8D%B0%E5%BA%A6%E5%8D%9A%E4%B8%BB%E8%B9%AD%E5%90%83%E7%99%BD%E5%AB%96%E8%A2%AB%E6%8B%92", "s": "贴吧"}, {"t": "考生喊话取消机建燃油费", "u": "https://tieba.baidu.com/hottopic/browse/hottopic?topic_id=28354959&amp;topic_name=%E8%80%83%E7%94%9F%E5%96%8A%E8%AF%9D%E5%8F%96%E6%B6%88%E6%9C%BA%E5%BB%BA%E7%87%83%E6%B2%B9%E8%B4%B9", "s": "贴吧"}, {"t": "脑洞剧本:没过本科线就回溯", "u": "https://tieba.baidu.com/hottopic/browse/hottopic?topic_id=28354978&amp;topic_name=%E8%84%91%E6%B4%9E%E5%89%A7%E6%9C%AC%3A%E6%B2%A1%E8%BF%87%E6%9C%AC%E7%A7%91%E7%BA%BF%E5%B0%B1%E5%9B%9E%E6%BA%AF", "s": "贴吧"}, {"t": "老公护娃冲动还手被判刑", "u": "https://tieba.baidu.com/hottopic/browse/hottopic?topic_id=28354972&amp;topic_name=%E8%80%81%E5%85%AC%E6%8A%A4%E5%A8%83%E5%86%B2%E5%8A%A8%E8%BF%98%E6%89%8B%E8%A2%AB%E5%88%A4%E5%88%91", "s": "贴吧"}, {"t": "年年破防,22届考生没完了", "u": "https://tieba.baidu.com/hottopic/browse/hottopic?topic_id=28354964&amp;topic_name=%E5%B9%B4%E5%B9%B4%E7%A0%B4%E9%98%B2%2C22%E5%B1%8A%E8%80%83%E7%94%9F%E6%B2%A1%E5%AE%8C%E4%BA%86", "s": "贴吧"}, {"t": "同人创飞原著,麻瓜进魔法学校", "u": "https://tieba.baidu.com/hottopic/browse/hottopic?topic_id=28354968&amp;topic_name=%E5%90%8C%E4%BA%BA%E5%88%9B%E9%A3%9E%E5%8E%9F%E8%91%97%2C%E9%BA%BB%E7%93%9C%E8%BF%9B%E9%AD%94%E6%B3%95%E5%AD%A6%E6%A0%A1", "s": "贴吧"}, {"t": "德国人就医喜提自家抗生素", "u": "https://tieba.baidu.com/hottopic/browse/hottopic?topic_id=28354971&amp;topic_name=%E5%BE%B7%E5%9B%BD%E4%BA%BA%E5%B0%B1%E5%8C%BB%E5%96%9C%E6%8F%90%E8%87%AA%E5%AE%B6%E6%8A%97%E7%94%9F%E7%B4%A0", "s": "贴吧"}, {"t": "数学老师4战高考最高137分", "u": "https://tieba.baidu.com/hottopic/browse/hottopic?topic_id=28354953&amp;topic_name=%E6%95%B0%E5%AD%A6%E8%80%81%E5%B8%884%E6%88%98%E9%AB%98%E8%80%83%E6%9C%80%E9%AB%98137%E5%88%86", "s": "贴吧"}, {"t": "滤镜失效,女主播靠真容圈粉", "u": "https://tieba.baidu.com/hottopic/browse/hottopic?topic_id=28354961&amp;topic_name=%E6%BB%A4%E9%95%9C%E5%A4%B1%E6%95%88%2C%E5%A5%B3%E4%B8%BB%E6%92%AD%E9%9D%A0%E7%9C%9F%E5%AE%B9%E5%9C%88%E7%B2%89", "s": "贴吧"}, {"t": "班级二游内战,原友作妖被孤立", "u": "https://tieba.baidu.com/hottopic/browse/hottopic?topic_id=28354952&amp;topic_name=%E7%8F%AD%E7%BA%A7%E4%BA%8C%E6%B8%B8%E5%86%85%E6%88%98%2C%E5%8E%9F%E5%8F%8B%E4%BD%9C%E5%A6%96%E8%A2%AB%E5%AD%A4%E7%AB%8B", "s": "贴吧"}, {"t": "追妹不开口,豆包化身代聊侠", "u": "https://tieba.baidu.com/hottopic/browse/hottopic?topic_id=28354960&amp;topic_name=%E8%BF%BD%E5%A6%B9%E4%B8%8D%E5%BC%80%E5%8F%A3%2C%E8%B1%86%E5%8C%85%E5%8C%96%E8%BA%AB%E4%BB%A3%E8%81%8A%E4%BE%A0", "s": "贴吧"}, {"t": "不要回答!发现外星人要上报", "u": "https://tieba.baidu.com/hottopic/browse/hottopic?topic_id=28354966&amp;topic_name=%E4%B8%8D%E8%A6%81%E5%9B%9E%E7%AD%94%21%E5%8F%91%E7%8E%B0%E5%A4%96%E6%98%9F%E4%BA%BA%E8%A6%81%E4%B8%8A%E6%8A%A5", "s": "贴吧"}, {"t": "小奶油学Bin哥自封上一世", "u": "https://tieba.baidu.com/hottopic/browse/hottopic?topic_id=28354958&amp;topic_name=%E5%B0%8F%E5%A5%B6%E6%B2%B9%E5%AD%A6Bin%E5%93%A5%E8%87%AA%E5%B0%81%E4%B8%8A%E4%B8%80%E4%B8%96", "s": "贴吧"}, {"t": "不如同人,女神4RE立绘翻车", "u": "https://tieba.baidu.com/hottopic/browse/hottopic?topic_id=28354951&amp;topic_name=%E4%B8%8D%E5%A6%82%E5%90%8C%E4%BA%BA%2C%E5%A5%B3%E7%A5%9E4RE%E7%AB%8B%E7%BB%98%E7%BF%BB%E8%BD%A6", "s": "贴吧"}, {"t": "播片当实机?归唐陷信任危机", "u": "https://tieba.baidu.com/hottopic/browse/hottopic?topic_id=28354982&amp;topic_name=%E6%92%AD%E7%89%87%E5%BD%93%E5%AE%9E%E6%9C%BA%3F%E5%BD%92%E5%94%90%E9%99%B7%E4%BF%A1%E4%BB%BB%E5%8D%B1%E6%9C%BA", "s": "贴吧"}, {"t": "开团!起点作家联名反抄袭", "u": "https://tieba.baidu.com/hottopic/browse/hottopic?topic_id=28354974&amp;topic_name=%E5%BC%80%E5%9B%A2%21%E8%B5%B7%E7%82%B9%E4%BD%9C%E5%AE%B6%E8%81%94%E5%90%8D%E5%8F%8D%E6%8A%84%E8%A2%AD", "s": "贴吧"}, {"t": "大作太多!新游挤爆夏日游戏节", "u": "https://tieba.baidu.com/hottopic/browse/hottopic?topic_id=28354981&amp;topic_name=%E5%A4%A7%E4%BD%9C%E5%A4%AA%E5%A4%9A%21%E6%96%B0%E6%B8%B8%E6%8C%A4%E7%88%86%E5%A4%8F%E6%97%A5%E6%B8%B8%E6%88%8F%E8%8A%82", "s": "贴吧"}, {"t": "后劲大:吧友回味16年高考作文", "u": "https://tieba.baidu.com/hottopic/browse/hottopic?topic_id=28354985&amp;topic_name=%E5%90%8E%E5%8A%B2%E5%A4%A7%3A%E5%90%A7%E5%8F%8B%E5%9B%9E%E5%91%B316%E5%B9%B4%E9%AB%98%E8%80%83%E4%BD%9C%E6%96%87", "s": "贴吧"}, {"t": "马斯克SpaceX拒绝中国投资者", "u": "https://tieba.baidu.com/hottopic/browse/hottopic?topic_id=28354956&amp;topic_name=%E9%A9%AC%E6%96%AF%E5%85%8BSpaceX%E6%8B%92%E7%BB%9D%E4%B8%AD%E5%9B%BD%E6%8A%95%E8%B5%84%E8%80%85", "s": "贴吧"}, {"t": "一眼阿童木?ZMD角色遭群嘲", "u": "https://tieba.baidu.com/hottopic/browse/hottopic?topic_id=28354957&amp;topic_name=%E4%B8%80%E7%9C%BC%E9%98%BF%E7%AB%A5%E6%9C%A8%3FZMD%E8%A7%92%E8%89%B2%E9%81%AD%E7%BE%A4%E5%98%B2", "s": "贴吧"}, {"t": "彻底炸穿!绿龙残暴速通9z", "u": "https://tieba.baidu.com/hottopic/browse/hottopic?topic_id=28354963&amp;topic_name=%E5%BD%BB%E5%BA%95%E7%82%B8%E7%A9%BF%21%E7%BB%BF%E9%BE%99%E6%AE%8B%E6%9A%B4%E9%80%9F%E9%80%9A9z", "s": "贴吧"}, {"t": "谁是正统?吧友为假小子XP吵翻", "u": "https://tieba.baidu.com/hottopic/browse/hottopic?topic_id=28354967&amp;topic_name=%E8%B0%81%E6%98%AF%E6%AD%A3%E7%BB%9F%3F%E5%90%A7%E5%8F%8B%E4%B8%BA%E5%81%87%E5%B0%8F%E5%AD%90XP%E5%90%B5%E7%BF%BB", "s": "贴吧"}, {"t": "心态崩了!高考数学难哭吧友", "u": "https://tieba.baidu.com/hottopic/browse/hottopic?topic_id=28354945&amp;topic_name=%E5%BF%83%E6%80%81%E5%B4%A9%E4%BA%86%21%E9%AB%98%E8%80%83%E6%95%B0%E5%AD%A6%E9%9A%BE%E5%93%AD%E5%90%A7%E5%8F%8B", "s": "贴吧"}, {"t": "全是考点,抽象数学题整懵众人", "u": "https://tieba.baidu.com/hottopic/browse/hottopic?topic_id=28354950&amp;topic_name=%E5%85%A8%E6%98%AF%E8%80%83%E7%82%B9%2C%E6%8A%BD%E8%B1%A1%E6%95%B0%E5%AD%A6%E9%A2%98%E6%95%B4%E6%87%B5%E4%BC%97%E4%BA%BA", "s": "贴吧"}, {"t": "各地高考作文,哪个最难写?", "u": "https://tieba.baidu.com/hottopic/browse/hottopic?topic_id=28354937&amp;topic_name=%E5%90%84%E5%9C%B0%E9%AB%98%E8%80%83%E4%BD%9C%E6%96%87%2C%E5%93%AA%E4%B8%AA%E6%9C%80%E9%9A%BE%E5%86%99%3F", "s": "贴吧"}, {"t": "撒哈拉卡车抛锚,49人活活渴死", "u": "https://tieba.baidu.com/hottopic/browse/hottopic?topic_id=28354941&amp;topic_name=%E6%92%92%E5%93%88%E6%8B%89%E5%8D%A1%E8%BD%A6%E6%8A%9B%E9%94%9A%2C49%E4%BA%BA%E6%B4%BB%E6%B4%BB%E6%B8%B4%E6%AD%BB", "s": "贴吧"}, {"t": "这样的婚姻还有必要持续下去吗？", "u": "https://www.chongbuluo.com/thread-24600-1-1.html", "s": "虫部落"}, {"t": "分享网易云会员，可领128天网易云会员", "u": "https://www.chongbuluo.com/thread-24246-1-1.html", "s": "虫部落"}, {"t": "打听！男生都想收到什么礼物啊？", "u": "https://www.chongbuluo.com/thread-24234-1-1.html", "s": "虫部落"}, {"t": "有什么你很想或者很喜欢的技能", "u": "https://www.chongbuluo.com/thread-24263-1-1.html", "s": "虫部落"}, {"t": "有什么有意思的爱好推荐吗", "u": "https://www.chongbuluo.com/thread-24349-1-1.html", "s": "虫部落"}, {"t": "知道我的个人信息泄露，但没想到泄露这么多", "u": "https://www.chongbuluo.com/thread-24589-1-1.html", "s": "虫部落"}, {"t": "It's my life", "u": "https://www.chongbuluo.com/thread-24385-1-1.html", "s": "虫部落"}, {"t": "21 年在一起，23 年男友出轨我不知道，25 年结婚，26 年才发现他 23 年出轨怎么办", "u": "https://www.chongbuluo.com/thread-24474-1-1.html", "s": "虫部落"}, {"t": "无聊！！来个成语接龙km！！", "u": "https://www.chongbuluo.com/thread-24286-1-1.html", "s": "虫部落"}, {"t": "36了还没结婚，很焦急", "u": "https://www.chongbuluo.com/thread-24604-1-1.html", "s": "虫部落"}, {"t": "经常用闲鱼买二手物品，感觉很省钱，但是一种被看不起感觉，如何矫正这种思想。", "u": "https://www.chongbuluo.com/thread-24410-1-1.html", "s": "虫部落"}, {"t": "你对什么气味有着特殊的癖好？", "u": "https://www.chongbuluo.com/thread-24542-1-1.html", "s": "虫部落"}, {"t": "Linux.do 邀请码发放", "u": "https://www.chongbuluo.com/thread-24394-1-1.html", "s": "虫部落"}, {"t": "网盘资源搜索小程序（永久免费使用）", "u": "https://www.chongbuluo.com/thread-24271-1-1.html", "s": "虫部落"}, {"t": "我好像心动了", "u": "https://www.chongbuluo.com/thread-24392-1-1.html", "s": "虫部落"}, {"t": "股市投资者自测指南——15问测测你是韭菜还是收割者", "u": "https://www.chongbuluo.com/thread-24239-1-1.html", "s": "虫部落"}, {"t": "你买了什么东西,增加了家里的幸福感,疯狂求安利!", "u": "https://www.chongbuluo.com/thread-24509-1-1.html", "s": "虫部落"}, {"t": "27岁普通女生，裸辞去学一门技术，冲动了嘛？", "u": "https://www.chongbuluo.com/thread-24455-1-1.html", "s": "虫部落"}, {"t": "张雪峰因心源性猝死去世，大家有什么要说的吗？", "u": "https://www.chongbuluo.com/thread-24288-1-1.html", "s": "虫部落"}, {"t": "你觉得在职场上有所谓的朋友吗？", "u": "https://www.chongbuluo.com/thread-24351-1-1.html", "s": "虫部落"}, {"t": "仅有的存款该不该买个偏远地方的二手小房", "u": "https://www.chongbuluo.com/thread-24280-1-1.html", "s": "虫部落"}, {"t": "关于一岁半小朋友进入语言爆发期，有没有合适的过来人经验可以借鉴", "u": "https://www.chongbuluo.com/thread-24373-1-1.html", "s": "虫部落"}, {"t": "现在这个节点要不要买房？", "u": "https://www.chongbuluo.com/thread-24402-1-1.html", "s": "虫部落"}, {"t": "终于忍不住还是注册了", "u": "https://www.chongbuluo.com/thread-24274-1-1.html", "s": "虫部落"}];
+            const input = document.getElementById('search-input');
+            const results = document.getElementById('search-results');
+            input.addEventListener('input', (e) => {
+                const val = e.target.value.trim().toLowerCase();
+                if (!val) { results.style.display = 'none'; return; }
+                const filtered = allData.filter(i => i.t.toLowerCase().includes(val)).slice(0, 50);
+                if (filtered.length > 0) {
+                    results.innerHTML = filtered.map(i => `
+                        <div class="search-item">
+                            <a href="${i.u}" target="_blank">${i.t}</a>
+                            <div class="search-source">${i.s}</div>
+                        </div>
+                    `).join('');
+                } else { results.innerHTML = '<div style="padding:10px; text-align:center; color:#999;">无结果</div>'; }
+                results.style.display = 'block';
+            });
+            document.addEventListener('click', (e) => {
+                if (!e.target.closest('.search-box')) results.style.display = 'none';
+            });
+        </script>
+    </body>
+    </html>
+    
