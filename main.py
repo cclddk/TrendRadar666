@@ -7,6 +7,7 @@ import re
 import time
 import webbrowser
 import smtplib
+import xml.etree.ElementTree as ET
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from email.header import Header
@@ -368,8 +369,46 @@ class DataFetcher:
     def __init__(self, proxy_url: Optional[str] = None):
         self.proxy_url = proxy_url
 
+    @staticmethod
+    def _xml_text(element: Optional[ET.Element]) -> str:
+        if element is None:
+            return ""
+        text = "".join(element.itertext()).strip()
+        return re.sub(r"\s+", " ", text)
+
+    @staticmethod
+    def _xml_child(element: ET.Element, name: str) -> Optional[ET.Element]:
+        for child in list(element):
+            if child.tag.rsplit("}", 1)[-1] == name:
+                return child
+        return None
+
+    def _fetch_rss_data(self, source: Dict, proxies: Optional[Dict], headers: Dict) -> str:
+        response = requests.get(source["url"], proxies=proxies, headers=headers, timeout=20)
+        response.raise_for_status()
+        root = ET.fromstring(response.content)
+        rss_items = [e for e in root.iter() if e.tag.rsplit("}", 1)[-1] == "item"]
+        atom_entries = [e for e in root.iter() if e.tag.rsplit("}", 1)[-1] == "entry"]
+        feed_items = rss_items or atom_entries
+        items = []
+        for entry in feed_items[: int(source.get("max_items", 30))]:
+            title = self._xml_text(self._xml_child(entry, "title"))
+            link_element = self._xml_child(entry, "link")
+            link = self._xml_text(link_element)
+            if not link and link_element is not None:
+                link = link_element.get("href", "")
+            if title:
+                items.append({"title": title, "url": link, "mobileUrl": link})
+        if not items:
+            raise ValueError("RSS feed contains no readable items")
+        return json.dumps({"status": "success", "items": items}, ensure_ascii=False)
+
     def fetch_data(self, id_info: Union[str, Tuple[str, str]], max_retries: int = 2, min_retry_wait: int = 3, max_retry_wait: int = 5) -> Tuple[Optional[str], str, str]:
-        if isinstance(id_info, tuple):
+        source = id_info if isinstance(id_info, dict) else None
+        if source:
+            id_value = source["id"]
+            alias = source.get("name", id_value)
+        elif isinstance(id_info, tuple):
             id_value, alias = id_info
         else:
             id_value = id_info
@@ -384,6 +423,8 @@ class DataFetcher:
         retries = 0
         while retries <= max_retries:
             try:
+                if source and source.get("type") == "rss":
+                    return self._fetch_rss_data(source, proxies, headers), id_value, alias
                 response = requests.get(url, proxies=proxies, headers=headers, timeout=10)
                 response.raise_for_status()
                 data_json = response.json()
@@ -400,8 +441,12 @@ class DataFetcher:
         id_to_name = {}
         failed_ids = []
         for i, id_info in enumerate(ids_list):
-            id_value = id_info[0] if isinstance(id_info, tuple) else id_info
-            name = id_info[1] if isinstance(id_info, tuple) else id_value
+            if isinstance(id_info, dict):
+                id_value = id_info["id"]
+                name = id_info.get("name", id_value)
+            else:
+                id_value = id_info[0] if isinstance(id_info, tuple) else id_info
+                name = id_info[1] if isinstance(id_info, tuple) else id_value
             id_to_name[id_value] = name
             resp, _, _ = self.fetch_data(id_info)
             if resp:
@@ -1009,7 +1054,7 @@ class NewsAnalyzer:
 
     def run(self):
         print(f"开始执行... 模式: {self.report_mode}")
-        results, id_to_name, failed_ids = self.data_fetcher.crawl_websites([(p["id"], p.get("name", p["id"])) for p in CONFIG["PLATFORMS"]])
+        results, id_to_name, failed_ids = self.data_fetcher.crawl_websites(CONFIG["PLATFORMS"])
         save_titles_to_file(results, id_to_name, failed_ids)
         
         data = self._load_analysis_data()
