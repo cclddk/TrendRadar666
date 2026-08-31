@@ -135,3 +135,83 @@ Professor Sanjay Mathur
 !Tourism
 !Study Abroad Agent
 !Immigration
+
+KI
+Künstliche Intelligenz
+Großes Sprachmodell
+ChatGPT
+Generative KI
+Bildgenerierung
+Videogenerierung
+Text-zu-Bild
+!Werbung
+!Schulung
+!Finanzen
+
+Finanzen
+Aktie
+Aktien
+Fonds
+Börse
+DAX
+US-Aktien
+
+Internet der Dinge
+IoT
+NAS
+Docker
+ESP32
+Mikrocontroller
+Firmware
+Firmware-Update
+!Gebraucht
+!Reparatur
+!Speicher
+
+Batterietechnik
+Neue Energie
+Elektroauto
+Elektromobilität
+Auto
+BYD
++Fortschritt
++Veröffentlichung
++Prinzip
+!Wartung
+!Probefahrt
+
+Medizintechnik
+Zahn
+Zahnarzt
+Zahnmedizin
+3D-Modellierung
+3D-Druck
++Innovation
++Anwendung
+
+Alexander von Humboldt Stiftung
+Humboldt-Stiftung
+Wissenschaftliche Arbeit
+Forschung
++Projekt
++Forschung
++Antrag
+!Plagiat
+!oberflächlich
+
+Industrietechnik
+Grundlagen
+Berufsbezeichnung
++Bewertung
++Fertigung
+
+Wohnung in Deutschland
+Wohnung mieten
+Jobsuche in Deutschland
+Arbeiten in Deutschland
+Leben in Deutschland
+Universität zu Köln
+Sanjay Mathur
+!Tourismus
+!Studienvermittler
+!Einwanderung
